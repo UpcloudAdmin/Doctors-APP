@@ -9,4 +9,5 @@ export const appColors = {
   loaderColor: '#9E9E9E',
   tan: '#DFCDBC',
   black: '#000000',
+  lightRed: '#FF9393',
 };

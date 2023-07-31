@@ -16,19 +16,19 @@ const PasswordError = ({passwordFocus, passwordCheck, value}) => {
         style={[
           styles?.layer,
           {
-            backgroundColor: passwordFocus
+            backgroundColor: textChecker
+              ? appColors?.lightGreen
+              : passwordFocus
               ? colorScheme === 'light'
                 ? 'white'
                 : 'black'
-              : textChecker
-              ? appColors?.lightGreen
               : '#FF9393',
           },
         ]}>
         <Text
           style={[
             styles?.label,
-            {color: passwordFocus ? '#007AFF' : textChecker ? 'green' : 'red'},
+            {color: textChecker ? 'green' : passwordFocus ? '#007AFF' : 'red'},
           ]}>
           A Alphabet
         </Text>
@@ -37,12 +37,12 @@ const PasswordError = ({passwordFocus, passwordCheck, value}) => {
         style={[
           styles?.layer,
           {
-            backgroundColor: passwordFocus
+            backgroundColor: numberChecker
+              ? appColors?.lightGreen
+              : passwordFocus
               ? colorScheme === 'light'
                 ? 'white'
                 : 'black'
-              : numberChecker
-              ? appColors?.lightGreen
               : '#FF9393',
           },
         ]}>
@@ -50,10 +50,10 @@ const PasswordError = ({passwordFocus, passwordCheck, value}) => {
           style={[
             styles?.label,
             {
-              color: passwordFocus
-                ? '#007AFF'
-                : numberChecker
+              color: numberChecker
                 ? 'green'
+                : passwordFocus
+                ? '#007AFF'
                 : 'red',
             },
           ]}>
@@ -64,12 +64,12 @@ const PasswordError = ({passwordFocus, passwordCheck, value}) => {
         style={[
           styles?.layer,
           {
-            backgroundColor: passwordFocus
+            backgroundColor: specialChecker
+              ? appColors?.lightGreen
+              : passwordFocus
               ? colorScheme === 'light'
                 ? 'white'
                 : 'black'
-              : specialChecker
-              ? appColors?.lightGreen
               : '#FF9393',
           },
         ]}>
@@ -77,10 +77,10 @@ const PasswordError = ({passwordFocus, passwordCheck, value}) => {
           style={[
             styles?.label,
             {
-              color: passwordFocus
-                ? '#007AFF'
-                : specialChecker
+              color: specialChecker
                 ? 'green'
+                : passwordFocus
+                ? '#007AFF'
                 : 'red',
             },
           ]}>
@@ -91,21 +91,19 @@ const PasswordError = ({passwordFocus, passwordCheck, value}) => {
         style={[
           styles?.layer,
           {
-            backgroundColor: passwordFocus
+            backgroundColor: valueLength
+              ? appColors?.lightGreen
+              : passwordFocus
               ? colorScheme === 'light'
                 ? 'white'
                 : 'black'
-              : valueLength
-              ? appColors?.lightGreen
               : '#FF9393',
           },
         ]}>
         <Text
           style={[
             styles?.label,
-            {
-              color: passwordFocus ? '#007AFF' : valueLength ? 'green' : 'red',
-            },
+            {color: valueLength ? 'green' : passwordFocus ? '#007AFF' : 'red'},
           ]}>
           8 Character
         </Text>

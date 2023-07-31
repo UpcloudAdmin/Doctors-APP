@@ -24,15 +24,17 @@ const SignUp = ({navigation}) => {
   const {colorScheme} = useAppCommonDataProvider();
 
   const signUpProcess = async () => {
-    const res = await apiPostModule('v11/user/signup', {
-      contact: signUpValues?.Phone,
-      firstName: signUpValues?.firstName,
-      lastName: signUpValues?.lastName,
-      password: signUpValues?.Password,
-      confirmPassword: signUpValues?.confirmPassword,
-      role: 'doctor',
-      regBy: 'manual',
-    });
+    navigation?.navigate('Login');
+    // const res = await apiPostModule('v11/user/signup', {
+    //   contact: signUpValues?.Phone,
+    //   firstName: signUpValues?.firstName,
+    //   lastName: signUpValues?.lastName,
+    //   password: signUpValues?.Password,
+    //   confirmPassword: signUpValues?.confirmPassword,
+    //   role: 'doctor',
+    //   regBy: 'manual',
+    // });
+    // console.log(res, '<---sqwewqeqw');
   };
   // useEffect(() => {
   //   GoogleSignin.configure({
@@ -46,7 +48,10 @@ const SignUp = ({navigation}) => {
   return (
     <ScreenWrapper
       statusBarColor={colorScheme === 'light' ? appColors?.white : 'black'}>
-      <View
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="always"
+        enableOnAndroid={true}
+        contentContainerStyle={{paddingBottom: 20}}
         style={{
           flex: 1,
           paddingHorizontal: '10%',
@@ -73,9 +78,7 @@ const SignUp = ({navigation}) => {
             Sign up to register yourself{'\n'}on this Platfom
           </Text>
         </View>
-        <KeyboardAwareScrollView
-          enableOnAndroid={true}
-          contentContainerStyle={{flex: 9}}>
+        <View contentContainerStyle={{flex: 9}}>
           <View style={{flex: 0.78}}>
             <CommonTextInput
               label="First Name"
@@ -179,19 +182,19 @@ const SignUp = ({navigation}) => {
               Or Sign Up with any of the Providers
             </Text>
           </View>
-        </KeyboardAwareScrollView>
-        <View style={{flex: 0.1, flexDirection: 'row'}}>
-          <Text style={{color: appColors?.gray}}>
-            If you already have an account ?
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation?.navigate('Login');
-            }}>
-            <Text style={{color: appColors?.orange}}>{' Sign in'}</Text>
-          </TouchableOpacity>
+          <View style={{flex: 0.1, flexDirection: 'row'}}>
+            <Text style={{color: appColors?.gray}}>
+              If you already have an account ?
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation?.navigate('Login');
+              }}>
+              <Text style={{color: appColors?.orange}}>{' Sign in'}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </ScreenWrapper>
   );
 };

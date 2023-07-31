@@ -1,18 +1,19 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import ScreenWrapper from '../../../components/ScreenWrapper';
 import {appColors} from '../../../utils/appColors';
 import CommonTextInput from '../../../components/CommonTextInput';
 import CommonButton from '../../../components/CommonButton';
 import {imagePath} from '../../../utils/imagePath';
-import {
-  check,
-  PERMISSIONS,
-  RESULTS,
-  requestMultiple,
-  request,
-} from 'react-native-permissions';
+import {PERMISSIONS, requestMultiple} from 'react-native-permissions';
+import {apiPostModule} from '../../../utils/commonFunction';
 const Login = ({navigation}) => {
+  const [loginValue, setLoginValue] = useState({
+    email: '',
+    password: '',
+    passwordeye: false,
+    passwordFocus: false,
+  });
   useEffect(() => {
     checkPrimission();
   }, []);
@@ -25,6 +26,14 @@ const Login = ({navigation}) => {
     ]).then(itm => {
       console.log(itm, '<--sadas');
     });
+  };
+
+  const loginMethod = async () => {
+    const res = await apiPostModule('v11/user/login', {
+      contact: 'chetan@gmail.com',
+      password: 'Admin@1313',
+    });
+    console.log(res, '<--sadas');
   };
 
   return (
@@ -50,14 +59,45 @@ const Login = ({navigation}) => {
           </Text>
         </View>
         <View style={{flex: 0.35}}>
-          <CommonTextInput label={'Email/Phone'} />
-          <CommonTextInput label={'Password'} />
+          <CommonTextInput
+            sucess={/^(?:\d{10}|\w+@\w+\.\w{2,3})$/.test(loginValue?.email)}
+            value={loginValue?.email}
+            label={'Email/Phone'}
+            onChangeText={e => {
+              setLoginValue({...loginValue, email: e});
+            }}
+          />
+          <CommonTextInput
+            label={'Password'}
+            sucess={/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(
+              loginValue?.password,
+            )}
+            value={loginValue?.password}
+            eyeValue={loginValue?.passwordeye}
+            onFocus={() => {
+              setLoginValue({...loginValue, passwordFocus: true});
+            }}
+            onBlur={() => {
+              setLoginValue({...loginValue, passwordFocus: false});
+            }}
+            passwordFocus={loginValue?.passwordFocus}
+            onChangeText={e => {
+              setLoginValue({...loginValue, password: e});
+            }}
+            onChangeEye={() => {
+              setLoginValue({
+                ...loginValue,
+                passwordeye: !loginValue?.passwordeye,
+              });
+            }}
+          />
         </View>
         <View style={{flex: 0.3}}>
           <View style={{flex: 0.3}}>
             <CommonButton
+              buttonText={'Login'}
               onPress={() => {
-                navigation?.navigate('SignSuccess');
+                loginMethod();
               }}
             />
           </View>

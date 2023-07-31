@@ -39,7 +39,7 @@ const CommonTextInput = ({
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            borderBottomColor: '#979797',
+            borderBottomColor: sucess ? appColors?.green : '#979797',
             borderBottomWidth: 0.6,
             width: 265,
             marginTop: '10%',

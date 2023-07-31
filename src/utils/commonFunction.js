@@ -9,4 +9,5 @@ export const apiPostModule = async (url, data) => {
     data: data,
   });
   console.log(response, '<---qwerty');
+  return response?.data;
 };
