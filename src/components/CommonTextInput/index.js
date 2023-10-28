@@ -28,6 +28,7 @@ const CommonTextInput = ({
   onFocus,
   onBlur,
   style,
+  maxlength,
 }) => {
   const {colorScheme} = useAppCommonDataProvider();
   console.log(!passwordFocus && value?.length !== 0, passwordFocus, value);
@@ -86,6 +87,46 @@ const CommonTextInput = ({
             />
           </View>
         )}
+      </View>
+    );
+  }
+  if (initvalue) {
+    return (
+      <View
+        style={{
+          height: 75,
+          flexDirection: 'row',
+          width: 265,
+          height: 40,
+          borderBottomColor: sucess ? appColors?.green : '#979797',
+          borderBottomWidth: 0.6,
+        }}>
+        <Text
+          style={{
+            color: colorScheme === 'light' ? 'black' : 'white',
+            marginRight: 10,
+            fontSize: 17,
+            justifyContent: 'center',
+          }}>
+          {initvalue}
+        </Text>
+        <TextInput
+          onChangeText={onChangeText}
+          maxLength={maxlength}
+          value={value}
+          placeholder={label}
+          style={[
+            {
+              width: 252,
+              height: 40,
+              paddingBottom: 20,
+              fontSize: 17,
+
+              color: colorScheme === 'light' ? 'black' : 'white',
+            },
+            style,
+          ]}
+        />
       </View>
     );
   }

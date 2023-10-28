@@ -7,7 +7,12 @@ import CommonButton from '../../../components/CommonButton';
 import {imagePath} from '../../../utils/imagePath';
 import {PERMISSIONS, requestMultiple} from 'react-native-permissions';
 import {apiPostModule} from '../../../utils/commonFunction';
+import {useAppCommonDataProvider} from '../../../navigation/AppCommonDataProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 const Login = ({navigation}) => {
+  const {colorScheme} = useAppCommonDataProvider();
   const [loginValue, setLoginValue] = useState({
     email: '',
     password: '',
@@ -23,30 +28,61 @@ const Login = ({navigation}) => {
       PERMISSIONS.IOS.CAMERA,
       PERMISSIONS.IOS.PHOTO_LIBRARY,
       PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY,
+      PERMISSIONS?.IOS?.MICROPHONE,
     ]).then(itm => {
       console.log(itm, '<--sadas');
     });
   };
 
   const loginMethod = async () => {
+    // navigation?.navigate('TabNavigator');
     const res = await apiPostModule('v11/user/login', {
-      contact: 'chetan@gmail.com',
-      password: 'Admin@1313',
+      contact: loginValue?.email,
+      password: loginValue?.password,
     });
+    if (res?.status === 'success') {
+      const deviceRes = await apiPostModule('v11/user/getDeviceToken', {
+        token: res?.access_token,
+        _id: res?.userInfo?._id,
+        role: 'doctor',
+      });
+      console.log(deviceRes, '<-deviceRes');
+      await AsyncStorage.setItem('token', JSON.stringify(res?.access_token));
+      await AsyncStorage.setItem('info', JSON.stringify(res?.userInfo));
+      navigation?.navigate('TabNavigator');
+    }
     console.log(res, '<--sadas');
   };
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '112069212219-tk7odcavp85d9gpiv9kpll6ot055r027.apps.googleusercontent.com',
+      offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    });
+  }, []);
 
+  const googleSign = async () => {
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+    console.log(userInfo, '<----userInfo');
+  };
   return (
-    <ScreenWrapper>
-      <View
-        style={{
-          flex: 1,
+    <ScreenWrapper
+      statusBarColor={colorScheme === 'light' ? appColors?.white : 'black'}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
           paddingHorizontal: '7%',
           paddingTop: '15%',
-          backgroundColor: 'white',
+          flex: 1,
+          backgroundColor: colorScheme === 'light' ? appColors?.white : 'black',
         }}>
-        <View style={{flex: 0.2}}>
-          <Text style={{fontSize: 40, color: appColors?.black}}>
+        <View style={{}}>
+          <Text
+            style={{
+              fontSize: 40,
+              color:
+                colorScheme === 'light' ? appColors?.black : appColors?.white,
+            }}>
             Welcome back
           </Text>
           <Text
@@ -58,7 +94,7 @@ const Login = ({navigation}) => {
             Sign in to continue using the app{' '}
           </Text>
         </View>
-        <View style={{flex: 0.35}}>
+        <View style={{marginBottom: 30}}>
           <CommonTextInput
             sucess={/^(?:\d{10}|\w+@\w+\.\w{2,3})$/.test(loginValue?.email)}
             value={loginValue?.email}
@@ -92,8 +128,8 @@ const Login = ({navigation}) => {
             }}
           />
         </View>
-        <View style={{flex: 0.3}}>
-          <View style={{flex: 0.3}}>
+        <View style={{}}>
+          <View style={{marginTop: 20}}>
             <CommonButton
               buttonText={'Login'}
               onPress={() => {
@@ -101,7 +137,7 @@ const Login = ({navigation}) => {
               }}
             />
           </View>
-          <View style={{flex: 0.3}}>
+          <View style={{marginTop: 20}}>
             <Text style={{color: appColors?.gray}}>
               You can continue signin through
             </Text>
@@ -113,11 +149,13 @@ const Login = ({navigation}) => {
                 width: 270,
               }}>
               <Image source={imagePath?.Facebook} />
-              <Image source={imagePath?.Google} />
+              <TouchableOpacity onPress={googleSign}>
+                <Image source={imagePath?.Google} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
-        <View style={{flex: 0.14}}>
+        <View style={{}}>
           <Text style={{color: appColors?.gray}}>Issues in Log in ?</Text>
           <TouchableOpacity
             onPress={() => {
@@ -126,7 +164,7 @@ const Login = ({navigation}) => {
             <Text style={{color: appColors?.orange}}>Forgot Password</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </ScreenWrapper>
   );
 };

@@ -1,16 +1,22 @@
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import ScreenWrapper from '../../../components/ScreenWrapper';
 import {appColors} from '../../../utils/appColors';
 import {imagePath} from '../../../utils/imagePath';
 import ListItems from './ListItems';
+import {useAppCommonDataProvider} from '../../../navigation/AppCommonDataProvider';
 
 const DisplayProfile = () => {
+  const {colorScheme} = useAppCommonDataProvider();
+  // useEffect(()=>{
+
+  // },[])
   return (
-    <ScreenWrapper statusBarColor={appColors?.white}>
+    <ScreenWrapper
+      statusBarColor={colorScheme === 'light' ? appColors?.white : 'black'}>
       <ScrollView
         contentContainerStyle={{
-          backgroundColor: appColors?.white,
+          backgroundColor: colorScheme === 'light' ? appColors?.white : 'black',
           height: 2400,
         }}>
         <Image
@@ -20,7 +26,12 @@ const DisplayProfile = () => {
         <View
           style={{marginTop: 30, marginHorizontal: 10, flexDirection: 'row'}}>
           <Text
-            style={{fontSize: 17, fontWeight: '700', color: appColors?.black}}>
+            style={{
+              fontSize: 17,
+              fontWeight: '700',
+              color:
+                colorScheme === 'light' ? appColors?.black : appColors?.white,
+            }}>
             13
           </Text>
           <View style={{marginTop: 17, flexDirection: 'row'}}>
@@ -33,7 +44,10 @@ const DisplayProfile = () => {
                 style={{
                   fontSize: 17,
                   fontWeight: '400',
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 Dr. Swapnil Katare
               </Text>
@@ -41,7 +55,10 @@ const DisplayProfile = () => {
                 style={{
                   fontSize: 17,
                   fontWeight: '600',
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 Ayurveda - Diabetiologist
               </Text>
@@ -50,7 +67,10 @@ const DisplayProfile = () => {
                   style={{
                     fontSize: 13,
                     fontWeight: '700',
-                    color: appColors?.black,
+                    color:
+                      colorScheme === 'light'
+                        ? appColors?.black
+                        : appColors?.white,
                   }}>
                   {'Mumbai    |'}
                 </Text>
@@ -58,7 +78,10 @@ const DisplayProfile = () => {
                   style={{
                     fontSize: 13,
                     fontWeight: '400',
-                    color: appColors?.black,
+                    color:
+                      colorScheme === 'light'
+                        ? appColors?.black
+                        : appColors?.white,
                   }}>
                   {'  Maharashtra'}
                 </Text>
@@ -73,7 +96,8 @@ const DisplayProfile = () => {
                 fontSize: 16,
                 fontWeight: '700',
                 justifyContent: 'center',
-                color: appColors?.black,
+                color:
+                  colorScheme === 'light' ? appColors?.black : appColors?.white,
               }}>
               Phone no :{' '}
             </Text>
@@ -82,7 +106,8 @@ const DisplayProfile = () => {
                 fontSize: 15,
                 fontWeight: '400',
                 justifyContent: 'center',
-                color: appColors?.black,
+                color:
+                  colorScheme === 'light' ? appColors?.black : appColors?.white,
               }}>
               {'   9230173019, 9002230341'}
             </Text>
@@ -93,7 +118,8 @@ const DisplayProfile = () => {
                 fontSize: 16,
                 fontWeight: '700',
                 justifyContent: 'center',
-                color: appColors?.black,
+                color:
+                  colorScheme === 'light' ? appColors?.black : appColors?.white,
               }}>
               Unique id
             </Text>
@@ -102,7 +128,8 @@ const DisplayProfile = () => {
                 fontSize: 15,
                 fontWeight: '400',
                 justifyContent: 'center',
-                color: appColors?.black,
+                color:
+                  colorScheme === 'light' ? appColors?.black : appColors?.white,
               }}>
               {'  9230173019, 9002230341'}
             </Text>
@@ -112,7 +139,8 @@ const DisplayProfile = () => {
               style={{
                 fontSize: 30,
                 fontWeight: '700',
-                color: appColors?.black,
+                color:
+                  colorScheme === 'light' ? appColors?.black : appColors?.white,
               }}>
               Activity
             </Text>
@@ -122,7 +150,8 @@ const DisplayProfile = () => {
               style={{
                 fontSize: 30,
                 fontWeight: '600',
-                color: appColors?.black,
+                color:
+                  colorScheme === 'light' ? appColors?.black : appColors?.white,
               }}>
               Education
             </Text>
@@ -132,7 +161,10 @@ const DisplayProfile = () => {
                   fontSize: 18,
                   fontWeight: '700',
                   marginTop: 10,
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 {' '}
                 BHMS
@@ -142,7 +174,10 @@ const DisplayProfile = () => {
                   fontSize: 15,
                   fontWeight: '400',
                   marginTop: 10,
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 {' '}
                 Maulana Azad Dental College ,Bhopal
@@ -152,7 +187,10 @@ const DisplayProfile = () => {
                   fontSize: 13,
                   fontWeight: '700',
                   marginTop: 10,
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 {' '}
                 2015
@@ -164,7 +202,10 @@ const DisplayProfile = () => {
                   fontSize: 18,
                   fontWeight: '700',
                   marginTop: 10,
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 {' '}
                 Diploma in Medicine & Surgery
@@ -174,7 +215,10 @@ const DisplayProfile = () => {
                   fontSize: 15,
                   fontWeight: '400',
                   marginTop: 10,
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 {' '}
                 Maulana Azad Dental College Bhopal
@@ -184,7 +228,10 @@ const DisplayProfile = () => {
                   fontSize: 13,
                   fontWeight: '700',
                   marginTop: 10,
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 {' '}
                 2015
@@ -196,7 +243,8 @@ const DisplayProfile = () => {
               style={{
                 fontSize: 30,
                 fontWeight: '600',
-                color: appColors?.black,
+                color:
+                  colorScheme === 'light' ? appColors?.black : appColors?.white,
               }}>
               Clinic Photo
             </Text>
@@ -205,7 +253,8 @@ const DisplayProfile = () => {
                 fontSize: 16,
                 fontWeight: '500',
                 paddingRight: '12%',
-                color: appColors?.black,
+                color:
+                  colorScheme === 'light' ? appColors?.black : appColors?.white,
               }}>
               Annusaya Nivas, 13, Pali Hill, Bandra (West), Mumbai 400050
             </Text>
@@ -220,7 +269,10 @@ const DisplayProfile = () => {
                   fontSize: 16,
                   fontWeight: '700',
                   textAlign: 'center',
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 Mon - Thur :{' '}
               </Text>
@@ -229,7 +281,10 @@ const DisplayProfile = () => {
                   textAlign: 'center',
                   fontSize: 16,
                   fontWeight: '400',
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 12:30 - 17:30, 19:00 - 22:30
               </Text>
@@ -244,7 +299,10 @@ const DisplayProfile = () => {
                   fontSize: 16,
                   fontWeight: '700',
                   textAlign: 'center',
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 Holiday :
               </Text>
@@ -253,7 +311,10 @@ const DisplayProfile = () => {
                   textAlign: 'center',
                   fontSize: 16,
                   fontWeight: '400',
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 Saturday, Sunday
               </Text>
@@ -269,14 +330,25 @@ const DisplayProfile = () => {
             <ListItems name={'Membership'} />
           </View>
           <View style={{marginTop: 30}}>
-            <Text style={{fontSize: 30, fontWeight: '600'}}>About</Text>
+            <Text
+              style={{
+                fontSize: 30,
+                fontWeight: '600',
+                color:
+                  colorScheme === 'light' ? appColors?.black : appColors?.white,
+              }}>
+              About
+            </Text>
             <View>
               <Text
                 style={{
                   fontSize: 15,
                   fontWeight: '400',
                   lineHeight: 18,
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis
                 sollicitudin nulla proin pretium risus, non aliquam. Neque,

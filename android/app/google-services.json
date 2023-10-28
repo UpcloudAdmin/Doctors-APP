@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "112069212219",
+    "project_id": "upcloud-tech-23",
+    "storage_bucket": "upcloud-tech-23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112069212219:android:c10b406aba388aa99a841e",
+        "android_client_info": {
+          "package_name": "com.doctorapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDenCrd6MjNfrNAmyM_EMHbq3dx0Y_pkSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

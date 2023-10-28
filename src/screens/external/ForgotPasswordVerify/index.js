@@ -4,15 +4,27 @@ import ScreenWrapper from '../../../components/ScreenWrapper';
 import {appColors} from '../../../utils/appColors';
 import CommonTextInput from '../../../components/CommonTextInput';
 import CommonButton from '../../../components/CommonButton';
+import {useAppCommonDataProvider} from '../../../navigation/AppCommonDataProvider';
 
 const ForgotPasswordVerify = ({navigation}) => {
+  const {colorScheme} = useAppCommonDataProvider();
   return (
-    <ScreenWrapper>
+    <ScreenWrapper
+      statusBarColor={colorScheme === 'light' ? appColors?.white : 'black'}>
       <View
-        style={{flex: 1, backgroundColor: appColors?.white, paddingTop: '10%'}}>
+        style={{
+          flex: 1,
+          backgroundColor: colorScheme === 'light' ? appColors?.white : 'black',
+          paddingTop: '10%',
+        }}>
         <View style={{paddingHorizontal: '7%', flex: 0.3}}>
           <Text
-            style={{fontSize: 37, fontWeight: '500', color: appColors?.black}}>
+            style={{
+              fontSize: 37,
+              fontWeight: '500',
+              color:
+                colorScheme === 'light' ? appColors?.black : appColors?.white,
+            }}>
             Forgot
             {'\n'}
             Password
@@ -39,6 +51,7 @@ const ForgotPasswordVerify = ({navigation}) => {
             paddingHorizontal: '7%',
           }}>
           <CommonButton
+            buttonText={'Continue'}
             onPress={() => {
               navigation?.navigate('ChangePassword');
             }}

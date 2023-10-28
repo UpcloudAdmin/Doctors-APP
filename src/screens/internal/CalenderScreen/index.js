@@ -1,12 +1,47 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ScreenWrapper from '../../../components/ScreenWrapper';
 import {appColors} from '../../../utils/appColors';
 import {Calendar} from 'react-native-calendars';
 import YearModal from './YearModal';
-
+import messaging from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native';
 const CalenderScreen = () => {
   const [showYear, setShowYear] = useState(false);
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await messaging()?.getToken();
+      console.log(token, '<---tokenedasdsa');
+    };
+    getToken();
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      const channelId = await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+      });
+      await notifee.displayNotification({
+        title: remoteMessage?.notification?.title,
+        body: remoteMessage?.notification?.body,
+        android: {
+          channelId,
+          // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+          // pressAction is needed if you want the notification to open the app when pressed
+          pressAction: {
+            id: 'default',
+          },
+        },
+      });
+    });
+
+    return unsubscribe;
+  }, []);
+  useEffect(() => {
+    const startNotification = async () => {
+      await notifee.requestPermission();
+    };
+    startNotification();
+  }, []);
   return (
     <ScreenWrapper statusBarColor={appColors?.brown}>
       <View style={{flex: 1, backgroundColor: appColors?.brown}}>

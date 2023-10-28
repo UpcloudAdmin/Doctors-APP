@@ -3,12 +3,23 @@ import React from 'react';
 import {appColors} from '../../utils/appColors';
 import * as Progress from 'react-native-progress';
 import {imagePath} from '../../utils/imagePath';
+import {useAppCommonDataProvider} from '../../navigation/AppCommonDataProvider';
 
 const ProfileBar = ({text, onPress, progress}) => {
+  const {colorScheme} = useAppCommonDataProvider();
   return (
     <View style={styles.container}>
       <View style={styles.profileInfo}>
-        <Text style={styles.profileTitle}>{text}</Text>
+        <Text
+          style={[
+            styles.profileTitle,
+            {
+              color:
+                colorScheme === 'light' ? appColors?.black : appColors?.white,
+            },
+          ]}>
+          {text}
+        </Text>
       </View>
       <TouchableOpacity onPress={onPress} style={styles.progressContainer}>
         {progress && (
@@ -18,7 +29,13 @@ const ProfileBar = ({text, onPress, progress}) => {
             <Progress.Bar progress={0.7} width={186} color={appColors?.brown} />
           </View>
         )}
-        <Image source={imagePath?.chevron} style={styles.chevronImage} />
+        <Image
+          tintColor={
+            colorScheme === 'light' ? appColors?.black : appColors?.white
+          }
+          source={imagePath?.chevron}
+          style={styles.chevronImage}
+        />
       </TouchableOpacity>
     </View>
   );
