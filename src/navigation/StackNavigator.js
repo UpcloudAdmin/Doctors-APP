@@ -30,7 +30,6 @@ import ClinicService from '../screens/internal/ClinicProfile/ClinicService';
 import VideoCall from '../screens/internal/VideoCall/VideoCall';
 import InnerAddress from '../screens/internal/PersonalProfile/InnerAddress';
 import writeAddress from '../screens/internal/PersonalProfile/writeAddress';
-import WeekelyCalendar from '../screens/internal/WeekelyCalendar/WeekelyCalendar';
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -60,9 +59,7 @@ const StackNavigator = () => {
         component={ForgotPasswordVerify}
       />
       <Stack.Screen name="SelectDegree" component={SelectDegree} />
-      <Stack.Screen name="InnerAddress" component={InnerAddress} screenOptions={{
-        headerShown:true
-      }} />
+      <Stack.Screen name="InnerAddress" component={InnerAddress} />
       <Stack.Screen name="HolidaySelector" component={HolidaySelector} />
       <Stack.Screen name="PersonalProfile" component={PersonalProfile} />
       <Stack.Screen name="SelectCollege" component={SelectCollege} />

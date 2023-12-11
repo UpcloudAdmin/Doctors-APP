@@ -40,15 +40,12 @@ const Login = ({navigation}) => {
       contact: loginValue?.email,
       password: loginValue?.password,
     });
-    console.log(res,"<--safdsfs")
     if (res?.status === 'success') {
-     
       const deviceRes = await apiPostModule('v11/user/getDeviceToken', {
         token: res?.access_token,
         _id: res?.userInfo?._id,
         role: 'doctor',
       });
-      console.log(res,"<--dcfgvbhhg")
       console.log(deviceRes, '<-deviceRes');
       await AsyncStorage.setItem('token', JSON.stringify(res?.access_token));
       await AsyncStorage.setItem('info', JSON.stringify(res?.userInfo));
@@ -56,18 +53,18 @@ const Login = ({navigation}) => {
     }
     console.log(res, '<--sadas');
   };
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId:
-  //       '112069212219-tk7odcavp85d9gpiv9kpll6ot055r027.apps.googleusercontent.com',
-  //     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-  //   });
-  // }, []);
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '112069212219-tk7odcavp85d9gpiv9kpll6ot055r027.apps.googleusercontent.com',
+      offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    });
+  }, []);
 
   const googleSign = async () => {
-    // await GoogleSignin.hasPlayServices();
-    // const userInfo = await GoogleSignin.signIn();
-    // console.log(userInfo, '<----userInfo');
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+    console.log(userInfo, '<----userInfo');
   };
   return (
     <ScreenWrapper
