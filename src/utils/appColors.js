@@ -8,6 +8,6 @@ export const appColors = {
   lightGreen: '#CBFFE0',
   loaderColor: '#9E9E9E',
   tan: '#DFCDBC',
-  black: '#000000',
+  black: '#212121',
   lightRed: '#FF9393',
 };

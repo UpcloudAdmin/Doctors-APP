@@ -8,11 +8,27 @@ export const AppContext = createContext({
 });
 export const AppCommonDataProvider = ({children}) => {
   const [colorScheme, setColorScheme] = useState(Appearance?.getColorScheme());
+  const [special, setSpecial] = useState([]);
+  const [college, setCollege] = useState({
+    deg: '',
+    college: '',
+    passingYear: '',
+  });
+  const [memberShip, setMembership] = useState([]);
+  const [clinicServices, setClinicServices] = useState([]);
   return (
     <AppContext.Provider
       value={{
         colorScheme,
         setColorScheme,
+        special,
+        setSpecial,
+        college,
+        setCollege,
+        setMembership,
+        memberShip,
+        setClinicServices,
+        clinicServices,
       }}>
       {children}
     </AppContext.Provider>

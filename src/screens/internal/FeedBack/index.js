@@ -1,18 +1,36 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import ScreenWrapper from '../../../components/ScreenWrapper';
 import {appColors} from '../../../utils/appColors';
 import {imagePath} from '../../../utils/imagePath';
 import NotificationTab from '../../../components/NotificationTab';
+import {useAppCommonDataProvider} from '../../../navigation/AppCommonDataProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiPostModule} from '../../../utils/commonFunction';
 
 const FeedBack = () => {
+  useEffect(() => {
+    getAllFeedBack();
+  }, []);
+  const getAllFeedBack = async () => {
+    const info = await AsyncStorage.getItem('info');
+    console.log(JSON.parse(info)?._id, '<--sdasdsadadsd');
+    const res = await apiPostModule('v11/feedbacks/feedbacks', {
+      doc_id: JSON.parse(info)?._id,
+    });
+    console.log(res, '<--responsee');
+  };
+  const {colorScheme} = useAppCommonDataProvider();
+  // const colorScheme = 'light';
   return (
-    <ScreenWrapper>
+    <ScreenWrapper
+      statusBarColor={colorScheme === 'light' ? appColors?.white : 'black'}>
       <View
         style={{
           flex: 1,
           backgroundColor: appColors?.white,
           paddingHorizontal: '7%',
+          backgroundColor: colorScheme === 'light' ? appColors?.white : 'black',
         }}>
         <View
           style={{
@@ -22,7 +40,12 @@ const FeedBack = () => {
             alignItems: 'center',
           }}>
           <Text
-            style={{fontSize: 28, fontWeight: '600', color: appColors?.black}}>
+            style={{
+              fontSize: 28,
+              fontWeight: '600',
+              color:
+                colorScheme === 'light' ? appColors?.black : appColors?.white,
+            }}>
             FeedBack
           </Text>
           <TouchableOpacity>

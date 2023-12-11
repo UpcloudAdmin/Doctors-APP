@@ -1,4 +1,11 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenWrapper from '../../../components/ScreenWrapper';
 import CommonTextInput from '../../../components/CommonTextInput/index';
@@ -6,6 +13,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {appColors} from '../../../utils/appColors';
 import CommonButton from '../../../components/CommonButton';
+import Toast from 'react-native-toast-message';
 import {imagePath} from '../../../utils/imagePath';
 import {useAppCommonDataProvider} from '../../../navigation/AppCommonDataProvider';
 import {apiPostModule} from '../../../utils/commonFunction';
@@ -24,7 +32,39 @@ const SignUp = ({navigation}) => {
   const {colorScheme} = useAppCommonDataProvider();
 
   const signUpProcess = async () => {
-    navigation?.navigate('Login');
+    // navigation?.navigate('Verification');
+    // console.log(signUpValues, '<---signUpValues');
+    if (
+      signUpValues?.firstName?.length >= 3 &&
+      signUpValues?.lastName?.length >= 3 &&
+      signUpValues?.Password?.length >= 8 &&
+      signUpValues?.confirmPassword?.length >= 8
+    ) {
+      console.log(signUpValues, '<--signUpValuessignUpValues');
+      try {
+        const res = await apiPostModule('v11/user/signup', {
+          contact: signUpValues?.Phone,
+          firstName: signUpValues?.firstName,
+          lastName: signUpValues?.lastName,
+          password: signUpValues?.Password,
+          confirmPassword: signUpValues?.confirmPassword,
+          role: 'doctor',
+          regBy: 'manual',
+        });
+        console.log(res, '<--asdadasda');
+        if (res?.status === 'success') {
+          navigation?.navigate('Verification', {
+            contact: signUpValues?.Phone,
+          });
+        } else {
+          Alert.alert('error', res?.message?.message);
+        }
+      } catch (er) {
+        console.log(er, '<--sadas');
+      }
+      console.log(signUpValues, '<---signUpValuessignUpValues');
+    }
+    // navigation?.navigate('Login');
     // const res = await apiPostModule('v11/user/signup', {
     //   contact: signUpValues?.Phone,
     //   firstName: signUpValues?.firstName,

@@ -19,4 +19,6 @@ export const imagePath = {
   mail: require('../assests/images/mail.png'),
   docProfile: require('../assests/images/docprofile.png'),
   map: require('../assests/images/map.png'),
+  handCard: require('../assests/images/handcard.png'),
+  upi: require('../assests/images/upi.png'),
 };

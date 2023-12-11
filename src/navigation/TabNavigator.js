@@ -13,7 +13,8 @@ const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+      initialRouteName="CalenderScreen">
       <Tab.Screen name="Home" component={DisplayProfile} />
       <Tab.Screen name="CalenderScreen" component={CalenderScreen} />
       <Tab.Screen name="Settings" component={FeedBack} />

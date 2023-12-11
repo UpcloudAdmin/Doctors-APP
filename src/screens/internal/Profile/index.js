@@ -5,10 +5,16 @@ import {appColors} from '../../../utils/appColors';
 import CommonHeader from '../../../components/CommonHeader';
 import * as Progress from 'react-native-progress';
 import ProfileBar from '../../../components/ProfileBar';
+import {useAppCommonDataProvider} from '../../../navigation/AppCommonDataProvider';
 const Profile = ({navigation}) => {
+  const {colorScheme} = useAppCommonDataProvider();
   return (
     <ScreenWrapper statusBarColor="#8B7156">
-      <View style={{flex: 1, backgroundColor: appColors?.white}}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colorScheme === 'light' ? appColors?.white : 'black',
+        }}>
         <View style={{flex: 2.5}}>
           <CommonHeader text={'Profile'} />
         </View>
@@ -50,6 +56,12 @@ const Profile = ({navigation}) => {
               text={'Verification'}
               onPress={() => {
                 navigation?.navigate('VerificationDoc');
+              }}
+            />
+            <ProfileBar
+              text={'Verification'}
+              onPress={() => {
+                navigation?.navigate('VideoCall');
               }}
             />
           </ScrollView>

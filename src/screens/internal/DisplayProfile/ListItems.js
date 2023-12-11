@@ -1,8 +1,10 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {appColors} from '../../../utils/appColors';
+import {useAppCommonDataProvider} from '../../../navigation/AppCommonDataProvider';
 
 const ListItems = ({name}) => {
+  const {colorScheme} = useAppCommonDataProvider();
   const arr = [
     'Hair Transplant Surgery',
     'Integrated Medicine',
@@ -11,7 +13,14 @@ const ListItems = ({name}) => {
   ];
   return (
     <View>
-      <Text style={{fontSize: 30, fontWeight: '600'}}>{name}</Text>
+      <Text
+        style={{
+          fontSize: 30,
+          fontWeight: '600',
+          color: colorScheme === 'light' ? appColors?.black : appColors?.white,
+        }}>
+        {name}
+      </Text>
       <FlatList
         data={arr}
         keyExtractor={(item, index) => index}
@@ -30,7 +39,10 @@ const ListItems = ({name}) => {
                 style={{
                   fontSize: 17,
                   fontWeight: '400',
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 {item}
               </Text>
@@ -38,7 +50,10 @@ const ListItems = ({name}) => {
                 style={{
                   fontSize: 17,
                   fontWeight: '700',
-                  color: appColors?.black,
+                  color:
+                    colorScheme === 'light'
+                      ? appColors?.black
+                      : appColors?.white,
                 }}>
                 5
               </Text>

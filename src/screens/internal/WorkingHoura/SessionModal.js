@@ -3,7 +3,8 @@ import React, {useEffect, useState} from 'react';
 import Modal from 'react-native-modal';
 import {appColors} from '../../../utils/appColors';
 import DatePicker from 'react-native-date-picker';
-const SessionModal = ({isVisible, setVisible}) => {
+import moment from 'moment';
+const SessionModal = ({isVisible, setVisible, setTime}) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState({
     date1: new Date(),
@@ -14,11 +15,12 @@ const SessionModal = ({isVisible, setVisible}) => {
   useEffect(() => {
     setModalVisible(isVisible);
   }, [isVisible]);
+  console.log(date, '<---sadasdsa');
   return (
     <Modal isVisible={ModalVisible}>
       <View
         style={{
-          flex: 0.35,
+          flex: 0.45,
           backgroundColor: appColors?.white,
           borderRadius: 10,
           paddingVertical: 20,
@@ -67,9 +69,13 @@ const SessionModal = ({isVisible, setVisible}) => {
               style={{width: 150}}
               date={date?.date1}
               mode="time"
-              onConfirm={date => {
+              onDateChange={dates => {
+                console.log(dates, '<---asdas');
                 setOpen(false);
-                setDate(date);
+                setDate({
+                  date1: dates,
+                  ...date,
+                });
               }}
               onCancel={() => {
                 setOpen(false);
@@ -82,9 +88,12 @@ const SessionModal = ({isVisible, setVisible}) => {
             date={date?.date2}
             style={{width: 150}}
             mode="time"
-            onConfirm={date => {
+            onConfirm={dates => {
               setOpen(false);
-              setDate(date);
+              setDate({
+                date2: dates,
+                ...date,
+              });
             }}
             onCancel={() => {
               setOpen(false);
@@ -97,8 +106,15 @@ const SessionModal = ({isVisible, setVisible}) => {
             <Text style={{textAlign: 'center'}}>09:30 PM</Text>
           </TouchableOpacity> */}
         </View>
-        <View style={{flex: 0.2}}>
-          <TouchableOpacity>
+        <View style={{flex: 0.2, marginTop: 50}}>
+          <TouchableOpacity
+            onPress={() => {
+              setTime(
+                `${moment(date?.date1).format('DD-MM-YYYY')}    -    ${moment(
+                  date?.date2,
+                ).format('DD-MM-YYYY')}`,
+              );
+            }}>
             <Text>Confirm</Text>
           </TouchableOpacity>
         </View>

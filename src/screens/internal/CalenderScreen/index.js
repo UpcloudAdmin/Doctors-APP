@@ -1,12 +1,44 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ScreenWrapper from '../../../components/ScreenWrapper';
 import {appColors} from '../../../utils/appColors';
 import {Calendar} from 'react-native-calendars';
 import YearModal from './YearModal';
-
-const CalenderScreen = () => {
+// import messaging from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native';
+const CalenderScreen = ({navigation}) => {
   const [showYear, setShowYear] = useState(false);
+
+  // useEffect(() => {
+  //   const startNotification = async () => {
+  //     await notifee.requestPermission();
+  //   };
+  //   startNotification();
+  // }, []);
+  // useEffect(() => {
+   
+
+  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
+  //     const channelId = await notifee.createChannel({
+  //       id: 'default',
+  //       name: 'Default Channel',
+  //     });
+  //     await notifee.displayNotification({
+  //       title: remoteMessage?.notification?.title,
+  //       body: remoteMessage?.notification?.body,
+  //       android: {
+  //         channelId,
+  //         // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+  //         // pressAction is needed if you want the notification to open the app when pressed
+  //         pressAction: {
+  //           id: 'default',
+  //         },
+  //       },
+  //     });
+  //   });
+
+  //   return unsubscribe;
+  // }, []);
   return (
     <ScreenWrapper statusBarColor={appColors?.brown}>
       <View style={{flex: 1, backgroundColor: appColors?.brown}}>
@@ -14,9 +46,9 @@ const CalenderScreen = () => {
           <TouchableOpacity
             style={{backgroundColor: 'red'}}
             onPress={() => {
-              setShowYear(true);
+              navigation?.navigate("WeekelyCalendar")
             }}>
-            <Text>show year modal</Text>
+            <Text>show weekeyl modal</Text>
           </TouchableOpacity>
           <Calendar
             onDayPress={day => {
@@ -48,10 +80,13 @@ const CalenderScreen = () => {
             alignItems: 'center',
           }}>
           <View style={{flexDirection: 'row', marginBottom: '5%'}}>
-            <View style={[styles?.grayView]}>
+          <TouchableOpacity style={[styles?.grayView]} onPress={()=>{navigation?.navigate("WeekelyCalendar")}} >
+
               <Text style={styles?.header}>Morning Slot</Text>
               <Text style={styles?.numberGiven}>29</Text>
-            </View>
+      
+
+            </TouchableOpacity>
             <View style={[styles?.grayView, {width: '50%'}]}>
               <Text style={styles?.header}>Morning Slot</Text>
               <Text style={styles?.numberGiven}>29</Text>
