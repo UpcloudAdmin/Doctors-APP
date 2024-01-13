@@ -46,7 +46,7 @@ const FeedBack = () => {
               color:
                 colorScheme === 'light' ? appColors?.black : appColors?.white,
             }}>
-            FeedBack
+            FeedBack1
           </Text>
           <TouchableOpacity>
             <Image source={imagePath?.notification} />

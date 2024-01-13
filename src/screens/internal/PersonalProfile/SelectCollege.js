@@ -17,8 +17,14 @@ import {useFocusEffect} from '@react-navigation/native';
 import {apiGetModule, apiPostModule} from '../../../utils/commonFunction';
 import CommonButton from '../../../components/CommonButton';
 import RightButton from '../../../components/RightButton/RightButton';
+import { connect, useSelector, useDispatch } from "react-redux";
+import { getCollegeListAction } from '../../../redux/action/Collegelist';
+import CustomMessage from '../../../utils/CustomMessage';
+
 
 const SelectCollege = ({navigation, route}) => {
+    const dispatch = useDispatch();
+
   const [college, setCollege] = useState([]);
   const [selectCollege, setSelectCollege] = useState('');
   useFocusEffect(
@@ -27,9 +33,28 @@ const SelectCollege = ({navigation, route}) => {
     }, []),
   );
   const getData = async () => {
-    const getCollege = await apiGetModule('v11/doctorlist/collegelist');
-    console.log(getCollege?.colleges, '<--getCollege');
-    setCollege(getCollege?.colleges);
+    // const getCollege = await apiGetModule('v11/doctorlist/collegelist');
+    // console.log(getCollege?.colleges, '<--getCollege');
+    // setCollege(getCollege?.colleges);
+    dispatch({
+      type: getCollegeListAction?.types?.start,
+      extraData: (collegeList) => {
+        console.log("collegeList", collegeList);
+        if (collegeList?.status === 200) {
+          if (collegeList?.data?.status == "success") {
+            // navigation?.navigate("Login");
+            CustomMessage(collegeList?.data?.message, "success");
+            setCollege(collegeList?.colleges);
+          }
+        } else {
+          CustomMessage(err?.response?.data?.message?.message, "danger");
+        }
+      },
+      onError: (err) => {
+        console.log("err", err);
+        //CustomMessage(err?.response?.data?.message?.message, "danger");
+      },
+    });
   };
   return (
     <ScreenWrapper>

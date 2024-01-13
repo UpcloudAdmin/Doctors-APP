@@ -1,12 +1,12 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
-import {appColors} from '../../utils/appColors';
-import * as Progress from 'react-native-progress';
-import {imagePath} from '../../utils/imagePath';
-import {useAppCommonDataProvider} from '../../navigation/AppCommonDataProvider';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { appColors } from "../../utils/appColors";
+import * as Progress from "react-native-progress";
+import { imagePath } from "../../utils/imagePath";
+import { useAppCommonDataProvider } from "../../navigation/AppCommonDataProvider";
 
-const ProfileBar = ({text, onPress, progress}) => {
-  const {colorScheme} = useAppCommonDataProvider();
+const ProfileBar = ({ text, onPress, progress }) => {
+  const { colorScheme } = useAppCommonDataProvider();
   return (
     <View style={styles.container}>
       <View style={styles.profileInfo}>
@@ -15,23 +15,31 @@ const ProfileBar = ({text, onPress, progress}) => {
             styles.profileTitle,
             {
               color:
-                colorScheme === 'light' ? appColors?.black : appColors?.white,
+                colorScheme === "light"
+                  ? appColors?.black
+                  : appColors?.lightWhite,
             },
-          ]}>
+          ]}
+        >
           {text}
         </Text>
       </View>
       <TouchableOpacity onPress={onPress} style={styles.progressContainer}>
         {progress && (
           <View style={styles.progressTextContainer}>
-            <Text style={styles.progressText}>57</Text>
+            <Text style={styles.progressText}>57%</Text>
 
-            <Progress.Bar progress={0.7} width={186} color={appColors?.brown} />
+            <Progress.Bar
+              progress={0.7}
+              width={186}
+              color={appColors?.lightblue}
+            />
           </View>
         )}
+
         <Image
           tintColor={
-            colorScheme === 'light' ? appColors?.black : appColors?.white
+            colorScheme === "light" ? appColors?.black : appColors?.white
           }
           source={imagePath?.chevron}
           style={styles.chevronImage}
@@ -43,39 +51,39 @@ const ProfileBar = ({text, onPress, progress}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    paddingVertical: '5%',
+    flexDirection: "row",
+    paddingVertical: "5%",
     borderBottomWidth: 1,
     borderBottomColor: appColors?.gray,
-    justifyContent: 'space-between',
-    paddingHorizontal: '2%',
+    justifyContent: "space-between",
+    paddingHorizontal: "2%",
   },
   profileInfo: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 10,
     height: 50,
   },
   profileTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: appColors?.black,
   },
   progressContainer: {
     height: 50,
     paddingTop: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   progressTextContainer: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   progressText: {
-    textAlign: 'center',
-    color: appColors?.black,
+    textAlign: "center",
+    color: appColors?.lightblue,
   },
   chevronImage: {
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 });
 

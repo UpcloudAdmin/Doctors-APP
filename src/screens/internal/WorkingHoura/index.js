@@ -42,10 +42,10 @@ const WorkingHours = ({navigation}) => {
                   fontWeight: '600',
                   color: appColors?.black,
                 }}>
-                Jo hoga deqha Jayega
+                Katare’s Integrative Health & Gastro ..
               </Text>
               <View>
-                <Text style={{color: appColors?.black}}>weekwew</Text>
+                <Text style={{color: appColors?.black}}>same for weekdays</Text>
               </View>
             </View>
           </View>
@@ -56,6 +56,8 @@ const WorkingHours = ({navigation}) => {
             borderBottomWidth: 1,
             borderBottomColor: 'black',
             borderTopColor: 'black',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}>
           <Text
             style={{
@@ -66,6 +68,16 @@ const WorkingHours = ({navigation}) => {
               color: appColors?.black,
             }}>
             Working Days
+          </Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: '600',
+              paddingVertical: 10,
+              paddingHorizontal: 50,
+              color: appColors?.blue,
+            }}>
+            Edit
           </Text>
         </View>
         <View style={{flex: 0.65}}>
@@ -83,7 +95,7 @@ const WorkingHours = ({navigation}) => {
                   fontWeight: '600',
                   color: appColors?.black,
                 }}>
-                Monday
+                Monday - Wendensday
               </Text>
               {workHours?.monday?.map(itm => {
                 return (
@@ -125,7 +137,7 @@ const WorkingHours = ({navigation}) => {
                   fontWeight: '600',
                   color: appColors?.black,
                 }}>
-                Tuesday
+                Friday
               </Text>
               {workHours?.tuesday?.map(itm => {
                 return (
@@ -161,7 +173,7 @@ const WorkingHours = ({navigation}) => {
                 borderBottomColor: '#979797',
                 borderBottomWidth: 0.6,
               }}>
-              <Text style={{fontSize: 20, fontWeight: '600'}}>Wednesday</Text>
+              <Text style={{fontSize: 20, fontWeight: '600'}}>Sunday</Text>
               {workHours?.wednesday?.map(itm => {
                 return (
                   <View style={{flexDirection: 'row'}}>
@@ -189,7 +201,7 @@ const WorkingHours = ({navigation}) => {
                 </TouchableOpacity>
               )}
             </View>
-            <View
+            {/* <View
               style={{
                 marginHorizontal: 20,
                 paddingVertical: 30,
@@ -272,7 +284,7 @@ const WorkingHours = ({navigation}) => {
                   </Text>
                 </TouchableOpacity>
               )}
-            </View>
+            </View> */}
           </ScrollView>
         </View>
         <View
@@ -293,6 +305,14 @@ const WorkingHours = ({navigation}) => {
             Holidays
           </Text>
         </View>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '600',
+            color: appColors?.black,
+          }}>
+          Monday - Wendensday
+        </Text>
         <View
           style={{
             flex: 0.15,

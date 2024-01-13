@@ -1,32 +1,46 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
-import {widthPercentageToDP} from 'react-native-responsive-screen';
-import {imagePath} from '../../utils/imagePath';
-import {appColors} from '../../utils/appColors';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { widthPercentageToDP } from "react-native-responsive-screen";
+import { imagePath } from "../../utils/imagePath";
+import { appColors } from "../../utils/appColors";
+import { useAppCommonDataProvider } from "../../navigation/AppCommonDataProvider";
 
-const CommonButton = ({onPress, buttonText, success}) => {
+const CommonButton = ({ onPress, buttonText, success }) => {
+  const { colorScheme } = useAppCommonDataProvider();
+
   return (
     <TouchableOpacity
       onPress={onPress}
       style={{
-        width: 167,
-        backgroundColor: success ? appColors?.orange : appColors?.lightGray,
-        paddingVertical: '5%',
-        paddingHorizontal: '5%',
+        width: 215,
+        backgroundColor:
+          colorScheme === "light"
+            ? appColors?.lightGray
+            : appColors?.transprance,
+
+        borderColor:
+          colorScheme === "light" ? appColors?.white : appColors?.orange,
+        borderWidth: 1,
+        paddingVertical: "5%",
+        paddingHorizontal: "5%",
         borderRadius: 15,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-      }}>
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }}
+    >
       <Text
         style={{
-          alignSelf: 'center',
+          alignSelf: "center",
           fontSize: 19,
-          color: success ? appColors?.white : appColors?.black,
-        }}>
+          color: colorScheme === "light" ? appColors?.black : appColors?.white,
+        }}
+      >
         {buttonText}
       </Text>
       <Image
-        tintColor={success ? appColors?.white : appColors?.black}
+        tintColor={
+          colorScheme === "light" ? appColors?.black : appColors?.white
+        }
         source={imagePath?.arrow}
       />
     </TouchableOpacity>

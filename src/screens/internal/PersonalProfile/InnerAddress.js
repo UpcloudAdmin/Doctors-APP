@@ -6,19 +6,24 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import ScreenWrapper from '../../../components/ScreenWrapper';
-import {appColors} from '../../../utils/appColors';
-import MapView, {Marker, PROVIDER_GOOGLE, UrlTile} from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
-import {Platform} from 'react-native';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import CommonButton from '../../../components/CommonButton';
-import {imagePath} from '../../../utils/imagePath';
-const InnerAddress = ({navigation}) => {
-  const [value, setValue] = useState('');
-  console.log(value, '<---wqweqewqe');
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import ScreenWrapper from "../../../components/ScreenWrapper";
+import { appColors } from "../../../utils/appColors";
+import MapView, { Marker, PROVIDER_GOOGLE, UrlTile } from "react-native-maps";
+import Geolocation from "@react-native-community/geolocation";
+import { Platform } from "react-native";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import CommonButton from "../../../components/CommonButton";
+import { imagePath } from "../../../utils/imagePath";
+import Geocoder from "react-native-geocoding";
+import { useAppCommonDataProvider } from "../../../navigation/AppCommonDataProvider";
+
+const InnerAddress = ({ navigation }) => {
+  const { colorScheme } = useAppCommonDataProvider();
+
+  const [value, setValue] = useState("");
+  console.log(value, "<---wqweqewqe");
   const [loc, setLoc] = useState({
     latitude: 0,
     longitude: 0,
@@ -31,10 +36,11 @@ const InnerAddress = ({navigation}) => {
   useEffect(() => {
     gteLoc();
   }, []);
+
   const gteLoc = () => {
     Geolocation.getCurrentPosition(
       //Will give you the current location
-      position => {
+      (position) => {
         setLoc({
           latitude: position?.coords?.latitude,
           longitude: position?.coords?.longitude,
@@ -43,22 +49,90 @@ const InnerAddress = ({navigation}) => {
           latitude: position?.coords?.latitude,
           longitude: position?.coords?.longitude,
         });
-        console.log(position, '<-hgdrfsedefrgth');
-      },
+        console.log(position, "log1");
+      }
     );
   };
+  const myApiKey = "AIzaSyBCE5TvjoFHpZA1Yz8bPOZCOce9grrzXrY";
+
+  function getAddressFromCoordinates({ latitude, longitude }) {
+    new Promise((resolve, reject) => {
+      fetch(
+        "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+          latitude +
+          "," +
+          longitude +
+          "&key=" +
+          myApiKey
+      )
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log(responseJson, "<---ppooee");
+          responseJson.address_components?.filter((val) => {
+            if (val.types?.includes("postal_code")) {
+              let postalCode = val.long_name;
+              console.log(postalCode, "<----ppp");
+              // zipCode = postalCode;
+            }
+
+            if (val.types?.includes("country")) {
+              let countryN = val.long_name;
+              //countryName = countryN;
+            }
+            if (val.types?.includes("administrative_area_level_1")) {
+              //stateName = val?.long_name;
+            }
+
+            if (val.types?.includes("locality")) {
+              //localityArea = val?.long_name;
+            }
+            return false;
+          });
+          // if (responseJson.status === "OK") {
+          //   console.log(responseJson?.results?.[0], "hhhhh");
+          //   resolve(responseJson?.results?.[0]?.formatted_address);
+          // } else {
+          //   reject("not found");
+          // }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   return (
-    <ScreenWrapper>
-      <View style={{flex: 1}}>
+    <ScreenWrapper
+      statusBarColor={colorScheme === "light" ? appColors?.white : "black"}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation?.goBack();
+          }}
+        >
+          <Image source={imagePath?.back} style={{ tintColor: "black" }} />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 28, fontWeight: "600" }}>Search Address</Text>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colorScheme === "light" ? appColors?.white : "black",
+        }}
+      >
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 10,
+            justifyContent: "center",
+            alignSelf: "center",
             zIndex: 111123213213213132,
-            width: '100%',
-          }}>
+            width: "90%",
+          }}
+        >
           <GooglePlacesAutocomplete
-            GooglePlacesDetailsQuery={{fields: 'geometry'}}
+            GooglePlacesDetailsQuery={{ fields: "geometry" }}
             placeholder="Search"
             fetchDetails={true}
             onPress={(data, details = null) => {
@@ -67,41 +141,52 @@ const InnerAddress = ({navigation}) => {
                 latitude: details?.geometry?.location?.lat,
                 longitude: details?.geometry?.location?.lng,
               });
-              console.log(data, details?.geometry?.location, '<--saasdsadas');
+              console.log(data, details?.geometry?.location, "<--saasdsadas");
             }}
             query={{
-              key: 'AIzaSyBCE5TvjoFHpZA1Yz8bPOZCOce9grrzXrY',
-              language: 'en',
+              key: "AIzaSyBCE5TvjoFHpZA1Yz8bPOZCOce9grrzXrY",
+              language: "en",
             }}
           />
         </View>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
 
-            backgroundColor: 'white',
-            position: 'absolute',
+            backgroundColor: "white",
+            position: "absolute",
             top: 15,
-          }}>
+          }}
+        >
           <TouchableOpacity
             onPress={() => {
               navigation?.goBack();
-            }}>
-            <Image source={imagePath?.back} tintColor={'black'} />
+            }}
+          >
+            <Image source={imagePath?.back} tintColor={"black"} />
           </TouchableOpacity>
-          <Text style={{fontSize: 28, fontWeight: '600'}}>Adress</Text>
+          <Text style={{ fontSize: 28, fontWeight: "600" }}>Adress</Text>
         </View>
         <MapView
           provider={PROVIDER_GOOGLE}
-          mapType={Platform.OS === 'android' ? 'none' : 'standard'}
+          mapType={Platform.OS === "android" ? "none" : "standard"}
           // coordinate={loc}
+          tracksViewChanges={true}
           showsUserLocation={true}
-          onRegionChange={e => {
-            console.log(e, '<--sadsads');
+          showsMyLocationButton={true}
+          followsUserLocation={true}
+          showsCompass={true}
+          scrollEnabled={true}
+          zoomEnabled={true}
+          pitchEnabled={true}
+          rotateEnabled={true}
+          onRegionChange={(e) => {
+            console.log(e, "<--sadsads");
           }}
           region={loc}
           // remove if not using Google Maps
-          style={{flex: 1}}>
+          style={{ flex: 1 }}
+        >
           <UrlTile
             /**
              * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
@@ -121,35 +206,37 @@ const InnerAddress = ({navigation}) => {
           <Marker
             draggable
             coordinate={loc}
-            description={'move this marker'}
-            onDragEnd={e => {
-              console.log(e.nativeEvent.coordinate, '<--sadasd');
+            description={"move this marker"}
+            onDragEnd={(e) => {
+              console.log(e.nativeEvent.coordinate, "<--sadasd");
               setLoc(e.nativeEvent.coordinate);
             }}
           />
         </MapView>
 
-        <TouchableOpacity onPress={gteLoc}>
+        <TouchableOpacity onPress={() => getAddressFromCoordinates(loc)}>
           <View
             style={{
-              position: 'absolute',
+              position: "absolute",
               height: 20,
               width: 20,
-              backgroundColor: 'red',
+              backgroundColor: "red",
               bottom: 20,
               right: 20,
-            }}></View>
+            }}
+          ></View>
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            width: '100%',
-            position: 'absolute',
+            width: "100%",
+            // position: "absolute",
             bottom: 10,
-          }}>
+          }}
+        >
           <CommonButton
-            buttonText={'Enter you full address'}
+            buttonText={"Enter you full address"}
             onPress={() => {
-              navigation?.navigate('writeAddress');
+              navigation?.navigate("WriteAddress");
             }}
           />
         </TouchableOpacity>

@@ -18,28 +18,29 @@ const YearModal = ({showYear}) => {
       'November',
       'December',
     ],
-    dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    dayNames: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
     today: 'Today',
     year: '', // letter behind year number -> 2020{year}
   };
   return (
-    <Modal visible={showYear}>
-      <View style={{flex: 1, backgroundColor: 'red'}}>
-        <Calendar
-          locale={CUSTOM_LOCALE}
-          pastYearRange={1}
-          startDate="2023-01-01"
-          onDayPress={day => {
-            console.log('selected day', day);
-          }}
-          disableMonthChange={true}
-          style={{
-            borderWidth: 1,
-            borderColor: 'gray',
-          }}
-        />
-      </View>
-    </Modal>
+    // <Modal visible={showYear}>
+    <View style={{flex: 1, backgroundColor: 'red'}}>
+      <Calendar
+        locale={CUSTOM_LOCALE}
+        pastYearRange={1}
+        startDate="2024-01-01"
+        onDayPress={day => {
+          console.log('selected day', day);
+        }}
+        disableMonthChange={true}
+        style={{
+          borderWidth: 1,
+          borderColor: 'gray',
+          height: 484,
+        }}
+      />
+    </View>
+    // </Modal>
   );
 };
 

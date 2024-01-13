@@ -1,8 +1,8 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import {TextInput} from 'react-native-paper';
-import {appColors} from '../../utils/appColors';
-import {useAppCommonDataProvider} from '../../navigation/AppCommonDataProvider';
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { TextInput } from "react-native-paper";
+import { appColors } from "../../utils/appColors";
+import { useAppCommonDataProvider } from "../../navigation/AppCommonDataProvider";
 const CommonInputBox = ({
   label,
   onFocus,
@@ -10,37 +10,30 @@ const CommonInputBox = ({
   editable,
   onPress,
   onChangeText,
+  props,
 }) => {
-  const {colorScheme} = useAppCommonDataProvider();
+  const { colorScheme } = useAppCommonDataProvider();
   return (
-    <View
-      onTouchStart={onPress}
-      // onStartShouldSetResponder={() => true}
-      // onStartShouldSetResponder={() => console.log('view pressed')}
-      style={{}}>
+    <View onTouchStart={onPress}>
       <TextInput
         onFocus={onFocus}
         style={{
-          width: '100%',
-          backgroundColor: colorScheme === 'light' ? appColors?.white : 'black',
-          height: 60,
-          marginTop: 10,
-          borderBottomWidth: colorScheme === 'light' ? 1 : 0,
-          borderColor: appColors?.black,
+          backgroundColor: colorScheme === "light" ? appColors?.white : "black",
+          height: 70,
+          borderBottomWidth: colorScheme === "light" ? 0.5 : 0,
         }}
-        // editable={false}
         value={value}
         underlineColor={
-          colorScheme === 'light' ? appColors?.white : appColors?.gray
+          colorScheme === "light" ? appColors?.white : appColors?.gray
         }
         placeholderTextColor={appColors?.gray}
         theme={{
           colors: {
-            text: colorScheme === 'light' ? appColors?.black : appColors?.gray,
+            text: colorScheme === "light" ? appColors?.black : appColors?.gray,
             underlineColor:
-              colorScheme === 'light' ? appColors?.black : appColors?.gray,
+              colorScheme === "light" ? appColors?.black : appColors?.gray,
             primary:
-              colorScheme === 'light' ? appColors?.black : appColors?.gray,
+              colorScheme === "light" ? appColors?.black : appColors?.gray,
           },
         }}
         label={label}
