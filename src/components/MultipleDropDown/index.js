@@ -68,7 +68,7 @@ const MultipleDropDown = ({navigation}) => {
                     <Text
                       style={{
                         fontSize: 15,
-                        fontWeight: 400,
+                        fontWeight: "400",
                         color: '#8A5D3C',
                       }}>
                       {item}
@@ -95,7 +95,7 @@ const MultipleDropDown = ({navigation}) => {
                     <Text
                       style={{
                         fontSize: 15,
-                        fontWeight: 400,
+                        fontWeight: "400",
                         color: appColors?.gray,
                       }}>
                       {item}

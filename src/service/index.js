@@ -1,5 +1,6 @@
 import axios from "axios";
 const BASEURL = "http://43.204.179.207:5000/api/v11/"; // client dev
+//const BASEURL = "http://localhost:5000/api/v11/"; // local dev
 export const request = (
   method,
   path,

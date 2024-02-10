@@ -63,7 +63,7 @@ const SingleDropDown = ({navigation}) => {
                     <Text
                       style={{
                         fontSize: 15,
-                        fontWeight: 400,
+                        fontWeight: "400",
                         color: appColors?.gray,
                       }}>
                       {item}

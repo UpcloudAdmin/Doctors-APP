@@ -1,10 +1,21 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { imagePath } from "../../utils/imagePath";
 import { appColors } from "../../utils/appColors";
 import * as Progress from "react-native-progress";
+import { useAppCommonDataProvider } from "../../navigation/AppCommonDataProvider";
 const CommonHeader = ({ showProgress, text, navigation }) => {
-  const [backgroundColor, setBackgroundColor] = useState("#8B7156"); // Default background color
+  const { colorScheme, setColorScheme } = useAppCommonDataProvider();
+
+  const [backgroundColor, setBackgroundColor] = useState(
+    colorScheme === "light"
+      ? appColors?.brown
+      : colorScheme === "dark"
+      ? appColors?.brown
+      : colorScheme === "justDark"
+      ? "#000000"
+      : appColors?.brown
+  ); // Default background color
 
   // Use useEffect to update the background color when the component mounts and every minute thereafter
   useEffect(() => {
@@ -31,12 +42,28 @@ const CommonHeader = ({ showProgress, text, navigation }) => {
       (currentTimeInMinutes >= 17 * 60 + 31 &&
         currentTimeInMinutes < 20 * 60 + 30)
     ) {
-      setBackgroundColor("##8B7156"); // Red color
+      setBackgroundColor(
+        colorScheme === "light"
+          ? appColors?.brown
+          : colorScheme === "dark"
+          ? appColors?.brown
+          : colorScheme === "justDark"
+          ? "#000000"
+          : appColors?.brown
+      ); // Red color
     } else if (
       currentTimeInMinutes >= 12 * 60 &&
       currentTimeInMinutes < 17 * 60 + 30
     ) {
-      setBackgroundColor("#8A5D36"); // Blue color
+      setBackgroundColor(
+        colorScheme === "light"
+          ? appColors?.brown
+          : colorScheme === "dark"
+          ? appColors?.brown
+          : colorScheme === "justDark"
+          ? "#000000"
+          : appColors?.brown
+      ); // Blue color
     } else if (
       currentTimeInMinutes >= 5 * 60 &&
       currentTimeInMinutes < 12 * 60
@@ -45,21 +72,47 @@ const CommonHeader = ({ showProgress, text, navigation }) => {
     } else if (currentTimeInMinutes >= 5 && currentTimeInMinutes < 12 * 60) {
       setBackgroundColor("#1B1516"); // Yellow color
     } else {
-      setBackgroundColor("#8B7156"); // Default color
+      setBackgroundColor(
+        colorScheme === "light"
+          ? appColors?.brown
+          : colorScheme === "dark"
+          ? appColors?.brown
+          : colorScheme === "justDark"
+          ? "#000000"
+          : appColors?.brown
+      ); // Default color
     }
   };
   return (
-    <View style={{ flex: 1, backgroundColor: backgroundColor }}>
-      <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "backgroundColor" }}>
+      <View
+        style={{
+          height: 184,
+          backgroundColor:
+            colorScheme === "light"
+              ? appColors?.brown
+              : colorScheme === "dark"
+              ? appColors?.brown
+              : colorScheme === "justDark"
+              ? "#000000"
+              : appColors?.brown
+        }}
+      >
         <View
           style={{
-            flex: 0.6,
-
+            //flex: 1,
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            paddingHorizontal: "4%",
-            backgroundColor: "#8B7156",
+            marginTop: 5,
+            backgroundColor:
+              colorScheme === "light"
+                ? appColors?.brown
+                : colorScheme === "dark"
+                ? appColors?.brown
+                : colorScheme === "justDark"
+                ? "#000000"
+                : appColors?.brown,
           }}
         >
           <View
@@ -75,7 +128,7 @@ const CommonHeader = ({ showProgress, text, navigation }) => {
             >
               <Image
                 source={imagePath?.back}
-                style={{ resizeMode: "contain" }}
+                style={{ resizeMode: "contain", marginBottom: 30 }}
               />
             </TouchableOpacity>
             <Text
@@ -94,6 +147,8 @@ const CommonHeader = ({ showProgress, text, navigation }) => {
               justifyContent: "space-between",
               alignItems: "center",
               width: "22%",
+              marginRight: 30,
+              marginBottom: 25,
             }}
           >
             <TouchableOpacity
@@ -109,30 +164,62 @@ const CommonHeader = ({ showProgress, text, navigation }) => {
         {showProgress && (
           <View
             style={{
+              marginTop: 15,
               alignItems: "center",
-              flex: 0.3,
-              backgroundColor: "#8B7156",
+              // flex: 0.6,
+              paddingLeft: 20,
+              backgroundColor:
+                colorScheme === "light"
+                  ? appColors?.brown
+                  : colorScheme === "dark"
+                  ? appColors?.brown
+                  : colorScheme === "justDark"
+                  ? "#000000"
+                  : appColors?.brown,
             }}
           >
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                width: 320,
+                width: 300,
                 marginBottom: 5,
               }}
             >
-              <Text style={{ color: appColors?.loaderColor }}>
+              <Text
+                style={{
+                  color: appColors?.white,
+                  marginTop: 5,
+                  fontSize: 12,
+                  fontWeight: "700",
+                }}
+              >
                 Profile Complete
               </Text>
-              <Text style={{ color: appColors?.lightWhite }}>100%</Text>
+              <Text
+                style={{
+                  color: appColors?.lightWhite,
+                  fontSize: 12,
+                  fontWeight: "700",
+                }}
+              >
+                100%
+              </Text>
             </View>
             <Progress.Bar
               color={appColors?.lightblue}
               progress={0.5}
               width={320}
             />
-            <Text style={{ paddingTop: 5, color: appColors?.lightWhite }}>
+            <Text
+              style={{
+                paddingTop: 5,
+                color: appColors?.lightWhite,
+                fontSize: 12,
+                fontWeight: "700",
+                paddingBottom: 10,
+              }}
+            >
               57%
             </Text>
           </View>
@@ -140,15 +227,22 @@ const CommonHeader = ({ showProgress, text, navigation }) => {
         {!showProgress && (
           <View
             style={{
-              flex: 0.4,
-              backgroundColor: "#af977e",
+              backgroundColor:
+                colorScheme === "light"
+                  ? "red"
+                  : colorScheme === "dark"
+                  ? appColors?.brown
+                  : colorScheme === "justDark"
+                  ? "#000000"
+                  : "red",
               flexDirection: "row",
               justifyContent: "space-between",
-              paddingHorizontal: "6%",
+              paddingHorizontal: "4%",
               alignItems: "center",
+              height: 64,
             }}
           >
-            <View style={{ flex: 1 }}>
+            <View style={{ width: "50%" }}>
               <Text
                 style={{
                   color: appColors?.white,

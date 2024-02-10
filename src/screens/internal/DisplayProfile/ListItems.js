@@ -1,10 +1,10 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import {appColors} from '../../../utils/appColors';
-import {useAppCommonDataProvider} from '../../../navigation/AppCommonDataProvider';
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { appColors } from "../../../utils/appColors";
+import { useAppCommonDataProvider } from "../../../navigation/AppCommonDataProvider";
 
 const ListItems = ({ name, data }) => {
-  console.log("data:---",data)
+  console.log("data:---", data);
   const { colorScheme } = useAppCommonDataProvider();
   const arr = [
     "Hair Transplant Surgery",
@@ -17,6 +17,7 @@ const ListItems = ({ name, data }) => {
       <Text
         style={{
           fontSize: 30,
+          marginBottom: 10,
           fontWeight: "600",
           color: colorScheme === "light" ? appColors?.black : appColors?.white,
         }}
@@ -33,10 +34,12 @@ const ListItems = ({ name, data }) => {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 paddingVertical: 6,
-                borderBottomColor: appColors?.gray,
-                borderBottomWidth: 0.6,
+                borderBottomColor:  colorScheme === "light"
+                      ? appColors?.listcolor
+                      : appColors?.white,
+                borderBottomWidth: 0.7,
                 marginTop: 10,
-                padding:4
+                padding: 4,
               }}
             >
               <Text
@@ -48,7 +51,7 @@ const ListItems = ({ name, data }) => {
                   color:
                     colorScheme === "light"
                       ? appColors?.black
-                      : appColors?.white,
+                      : appColors?.loaderColor,
                 }}
               >
                 {item}
@@ -63,7 +66,7 @@ const ListItems = ({ name, data }) => {
                       : appColors?.white,
                 }}
               >
-                4
+                {/* 4 */}
               </Text>
             </View>
           );

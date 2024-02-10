@@ -18,7 +18,7 @@ const FeedBack = () => {
     const res = await apiPostModule('v11/feedbacks/feedbacks', {
       doc_id: JSON.parse(info)?._id,
     });
-    console.log(res, '<--responsee');
+    console.log(res, "<--responsee feedbacks");
   };
   const {colorScheme} = useAppCommonDataProvider();
   // const colorScheme = 'light';
@@ -28,8 +28,8 @@ const FeedBack = () => {
       <View
         style={{
           flex: 1,
-          backgroundColor: appColors?.white,
-          paddingHorizontal: '7%',
+        //  backgroundColor: "blue",
+         // paddingHorizontal: 30,
           backgroundColor: colorScheme === 'light' ? appColors?.white : 'black',
         }}>
         <View
@@ -38,6 +38,8 @@ const FeedBack = () => {
             justifyContent: 'space-between',
             alignContent: 'center',
             alignItems: 'center',
+            marginTop:5,
+            paddingHorizontal: 30,
           }}>
           <Text
             style={{
@@ -46,13 +48,13 @@ const FeedBack = () => {
               color:
                 colorScheme === 'light' ? appColors?.black : appColors?.white,
             }}>
-            FeedBack1
+            FeedBack
           </Text>
           <TouchableOpacity>
             <Image source={imagePath?.notification} />
           </TouchableOpacity>
         </View>
-        <View style={{paddingTop: 50}}>
+        <View style={{paddingTop: 25,}}>
           <NotificationTab />
         </View>
       </View>

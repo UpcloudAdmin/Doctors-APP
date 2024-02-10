@@ -1,22 +1,24 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
-import ScreenWrapper from '../../../components/ScreenWrapper';
-import {appColors} from '../../../utils/appColors';
-import CommonHeader from '../../../components/CommonHeader';
-import {imagePath} from '../../../utils/imagePath';
-import CommonTextInput from '../../../components/CommonTextInput';
-import CommonInputBox from '../../../components/CommonInputBox';
-import { useAppCommonDataProvider } from '../../../navigation/AppCommonDataProvider';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import ScreenWrapper from "../../../components/ScreenWrapper";
+import { appColors } from "../../../utils/appColors";
+import CommonHeader from "../../../components/CommonHeader";
+import { imagePath } from "../../../utils/imagePath";
+import CommonTextInput from "../../../components/CommonTextInput";
+import CommonInputBox from "../../../components/CommonInputBox";
+import { useAppCommonDataProvider } from "../../../navigation/AppCommonDataProvider";
+import { useRoute } from "@react-navigation/native";
 
-const WriteAddress = ({navigation}) => {
-    const { colorScheme } = useAppCommonDataProvider()
-
+const WriteAddress = ({ navigation }) => {
+  const { colorScheme } = useAppCommonDataProvider();
+  const routes = useRoute();
+  console.log("routes?.params", routes?.params);
   const [address, setAddress] = useState({
-    pincode: '',
-    homeAddress: '',
-    exactLocationOnMap: '',
-    state: '',
-    City: '',
+    pincode: "",
+    homeAddress: "",
+    exactLocationOnMap: "",
+    state: "",
+    City: "",
   });
   return (
     <ScreenWrapper
@@ -28,7 +30,7 @@ const WriteAddress = ({navigation}) => {
             flexDirection: "row",
             alignItems: "center",
             backgroundColor:
-              colorScheme === "light" ? appColors?.white : "black",
+              colorScheme === "light" ? appColors?.white : appColors?.black,
           }}
         >
           <TouchableOpacity
@@ -57,7 +59,7 @@ const WriteAddress = ({navigation}) => {
             paddingHorizontal: 20,
             // marginTop: "20%",
             backgroundColor:
-              colorScheme === "light" ? appColors?.white : "black",
+              colorScheme === "light" ? appColors?.white : appColors?.black,
 
             // height: '100%',
           }}

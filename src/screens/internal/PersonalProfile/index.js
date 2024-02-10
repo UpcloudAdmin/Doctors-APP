@@ -1,4 +1,12 @@
-import { ScrollView, StyleSheet, Text, View, FlatList } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import ScreenWrapper from "../../../components/ScreenWrapper";
 import { appColors } from "../../../utils/appColors";
@@ -17,6 +25,12 @@ import Modal from "react-native-modal";
 import AnotherContact from "./AnotherContact";
 import AnotherContactList from "./AnotherContactList";
 import { DoctorProfileMeAction } from "../../../redux/action/doctorProfileMe";
+import AnimatedInput from "react-native-animated-input";
+import CommonTextInput from "../../../components/CommonTextInput";
+import FormField from "../../../components/CustomField/FormField";
+import { Picker } from "@react-native-picker/picker";
+import RNPickerSelect from "react-native-picker-select";
+
 var contactList = [];
 const PersonalProfile = ({ navigation }) => {
   const { colorScheme, special, college, memberShip } =
@@ -26,7 +40,16 @@ const PersonalProfile = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#8B7156"); // Default background color
   const dispatch = useDispatch();
-
+  const [isValid, setIsValid] = useState(true);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [about, setAbout] = useState("");
+  const [email, setEmail] = useState("");
+  const [dob, setDob] = useState("");
+  const [address, setAddress] = useState("");
+  const [contactNumber, setContactNumber] = useState(null);
+  const [professional, setProfessional] = useState(null);
+  const [exepreince, setExepreince] = useState(null);
   const [values, setValues] = useState({
     degree: "",
     speciality: [],
@@ -48,6 +71,33 @@ const PersonalProfile = ({ navigation }) => {
     setSelectedGender(gender);
     setModalVisible(false);
     // onGenderSelected(gender);
+  };
+  const onHandleGender = (key, value) => {
+    // setProfileDate({ ...profileData, value: profileData });
+    Alert.alert(value);
+    setSelectedGender(value);
+    setModalVisible(false);
+  };
+  const onHandleFirstName = (key, value) => {
+    setFirstName(value);
+  };
+  const onHandleLastName = (key, value) => {
+    setLastName(value);
+  };
+  const onHandleAbout = (key, value) => {
+    setAbout(value);
+  };
+  const onHandleEmail = (key, value) => {
+    setEmail(value);
+  };
+  const onHandleDob = (key, value) => {
+    setDob(value);
+  };
+  const onHandleAddress = (key, value) => {
+    setAddress(value);
+  };
+  const onHandlePersonalContact = (key, value) => {
+    setContactNumber(value);
   };
   // Use useEffect to update the background color when the component mounts and every minute thereafter
   useEffect(() => {
@@ -92,65 +142,48 @@ const PersonalProfile = ({ navigation }) => {
     }
   };
   const handleProfile = async () => {
-    dispatch({
-      type: DoctorProfileMeAction?.types?.start,
-      payload: {
-        name: "profileData?.name",
-        primarySpeciality: "Opthalmologist",
-        city: "asd",
-        homeAddress: "R.T. Road, Naya Bazaar",
-        experience: 33,
-        primarySpeciality: "Opthalmologist",
-        lat: 22.76861,
-        lon: 6542,
-        dob: moment("06-11-1970")?.format("DD-MM-YYYY"),
-        state: "Jharkhand",
-        locality: "Jugsalai",
-        pincode: 831006,
-        gender: "male",
-        phoneNumber: "9876567876", //profileData?.personalContactNumber,
-        membership: [
-          "All India Straubismological Society",
-          "Am Charitable Trust",
-          "Am Charitable Trust",
-        ], //memberShip,
-        stream: "eye",
-        registration:["ORTHOPEDIST", "h"],
-        specialities: ["ORTHOPEDIST", "GYNAECOLOGIST"], //special,
-        services: [],
-        education: [
-          {
-            deg: "college?.deg",
-            college: "college?.college",
-            passingYear: 1990,//"college?.passingYear",
-          },
-        ],
-        about:
-          "I am an eye doctor. I have a lot of experience in treating people's eyes.",
-
-        extraData: (doctorProfileMe) => {
-          console.log("doctorProfileMe", doctorProfileMe);
-          if (doctorProfileMe?.status === 200) {
-            if (doctorProfileMe?.data?.status == "success") {
-              // navigation?.navigate("Login");
-               CustomMessage(
-                 doctorProfileMe?.data?.message,
-                 "success"
-               );
-            }
-          } else {
-            CustomMessage(err?.response?.data?.message?.message, "danger");
-          }
+    const data = {
+      name: firstName + lastName,
+      primarySpeciality: "Opthalmologist",
+      city: "asd",
+      homeAddress: "R.T. Road, Naya Bazaar",
+      experience: "5",
+      lat: 22.76861,
+      lon: 6542,
+      phoneNumber: "9463826048",
+      dob: "06-01-1997",
+      state: "Jharkhand",
+      locality: "Jugsalai",
+      pincode: 831006,
+      gender: selectedGender,
+      membership: [
+        "All India Medicos Society",
+        "All India Straubismological Society",
+        "Am Charitable Trust",
+        "American Holistic Health Association (U.S.A.)",
+      ],
+      stream: "eye",
+      specialities: ["GENERAL MEDICINE", "BARIATRIC SURGEON", "AYURVEDA"],
+      services: [],
+      education: [
+        {
+          deg: college?.deg,
+          college: college?.college,
+          passingYear: college?.passingYear,
         },
-        onError: (err) => {
-          console.log("err", err);
-          //CustomMessage(err?.response?.data?.message?.message, "danger");
-        },
-      },
-    });
-    // const response = await apiPostModule("v11/user/doctor/me", data);
-    // console.log(response, "<---response");
+      ],
+      about:
+        "I am an eye doctor. I have a lot of experience in treating people's eyes.",
+    };
+    const response = await apiPostModule("v11/user/doctor/me", data);
+    console.log(response, "<---response");
+    if (response?.status === "success") {
+      CustomMessage(response?.message, "success");
+    } else {
+      CustomMessage(response?.message, "danger");
+    }
   };
+
   const onFocus = () => {
     setModalVisible(true);
     console.log("onFocus");
@@ -187,47 +220,130 @@ const PersonalProfile = ({ navigation }) => {
   };
 
   return (
-    <ScreenWrapper statusBarColor={backgroundColor}>
+    <ScreenWrapper
+      statusBarColor={
+        colorScheme === "light"
+          ? appColors?.brown
+          : colorScheme === "dark"
+          ? appColors?.brown
+          : colorScheme === "justDark"
+          ? "#000000"
+          : appColors?.brown
+      }
+    >
+      <View
+        header={"PersonalProfile"}
+        style={{ height: 170, backgroundColor: appColors?.brown }}
+      >
+        <CommonHeader
+          navigation={navigation}
+          text={"Personal\nPorfile"}
+          showProgress={true}
+        />
+      </View>
       <View
         style={{
           flex: 1,
-          backgroundColor: colorScheme === "light" ? appColors?.white : "black",
+          backgroundColor:
+            colorScheme === "light" ? appColors?.white : appColors?.black,
         }}
       >
-        <View header={"PersonalProfile"} style={{ flex: 0.23 }}>
-          <CommonHeader
-            navigation={navigation}
-            text={"Personal\nPorfile"}
-            showProgress={true}
-          />
-        </View>
         <View style={{ flex: 1 }}>
           <ScrollView
             contentContainerStyle={{
-              marginHorizontal: 27,
+              margin: 15,
               marginTop: "7%",
-              paddingBottom: 50,
+              paddingBottom: 100,
             }}
           >
-            <CommonInputBox
-              label={"Name"}
-              onChangeText={(e) => {
-                setProfileDate({ ...profileData, name: e });
+            <FormField
+              handleChange={onHandleAbout}
+              value={about}
+              defaultValue={about}
+              textInputId="About"
+              label="About*"
+              textInputProps={{
+                returnKeyType: "done",
               }}
             />
-            <CommonInputBox
-              label={"Email"}
-              onChangeText={(e) => {
-                setProfileDate({ ...profileData, email: e });
+            <FormField
+              handleChange={onHandleFirstName}
+              value={firstName}
+              defaultValue={firstName}
+              textInputId="First name"
+              label="First Name*"
+              textInputProps={{
+                returnKeyType: "done",
               }}
             />
-            <CommonInputBox
-              label={"DOB"}
-              value={moment(profileData?.dob)?.format("DD-MM-YYYY")}
+            <FormField
+              handleChange={onHandleLastName}
+              value={lastName}
+              defaultValue={lastName}
+              textInputId="Last name"
+              label="Last Name*"
+              textInputProps={{
+                returnKeyType: "done",
+              }}
+            />
+
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => {
+                navigation?.navigate("SelectYear");
+              }}
+              style={{ flex: 1 }}
+            >
+              <FormField
+                handleChange={onHandleEmail}
+                value={email}
+                defaultValue={email}
+                textInputId="Email"
+                label="Email*"
+                textInputProps={{
+                  returnKeyType: "done",
+                }}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => {
+                navigation?.navigate("InnerAddress");
+              }}
+              style={{ flex: 1 }}
+            >
+              <FormField
+                handleChange={onHandleAddress}
+                value={address}
+                defaultValue={address}
+                textInputId="Address"
+                label="Address*"
+                textInputProps={{
+                  returnKeyType: "done",
+                }}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={1}
               onPress={() => {
                 setDateVisible(true);
               }}
-            />
+              style={{ flex: 1 }}
+            >
+              <FormField
+                handleChange={onHandleDob}
+                value={moment(profileData?.dob)?.format("DD-MM-YYYY")}
+                defaultValue={dob}
+                textInputId="D.O.B"
+                label="D.O.B*"
+                textInputProps={{
+                  returnKeyType: "done",
+                }}
+              />
+            </TouchableOpacity>
+
             <DatePicker
               modal
               open={dateVisible}
@@ -241,30 +357,24 @@ const PersonalProfile = ({ navigation }) => {
                   dob: dates,
                 });
                 console.log(dates, "<--sadasda");
-                // setOpen(false);
-                // setDate({
-                //   date2: dates,
-                //   ...date,
-                // });
               }}
               onCancel={() => {
                 setDateVisible(false);
                 // setOpen(false);
               }}
             />
-            <CommonInputBox
-              label={"Address"}
-              onPress={() => {
-                navigation?.navigate("InnerAddress");
+
+            <FormField
+              handleChange={onHandlePersonalContact}
+              value={contactNumber}
+              defaultValue={contactNumber}
+              textInputId="Personal Contact Number"
+              label="Personal Contact Number*"
+              textInputProps={{
+                returnKeyType: "done",
               }}
             />
 
-            <CommonInputBox
-              label={"Personal Contact Number"}
-              onChangeText={(e) => {
-                setProfileDate({ ...profileData, personalContactNumber: e });
-              }}
-            />
             {
               <FlatList
                 data={contactList}
@@ -286,25 +396,78 @@ const PersonalProfile = ({ navigation }) => {
                 EnterNumber={setNewNumber}
               />
             )}
-
-            {/* <CommonButton
-              buttonText={"Add Another Contact"}
-              onPress={() => setNewNumberShow(!newNumberShow)}
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => {
+                setModalVisible(true);
+              }}
+              style={{ flex: 1 }}
+            >
+              <FormField
+                editable={false}
+                handleChange={onHandleGender}
+                value={selectedGender}
+                defaultValue={selectedGender}
+                textInputId="Gender"
+                label="Gender*"
+                textInputProps={{
+                  returnKeyType: "done",
+                }}
+              />
+            </TouchableOpacity>
+            {/* <CommonInputBox
+              editable={false}
+              onFocus={onFocus}
+              value={selectedGender}
+              label={"Gender*"}
             /> */}
-
+            <GenderSelectionModal
+              isVisible={modalVisible}
+              selectedGender={selectedGender}
+              handleGenderSelect={onHandleGender}
+              label={"Gender"}
+            />
             <CommonInputBox
               editable={false}
               onFocus={onFocus}
               value={selectedGender}
-              label={"gender"}
+              label={"Stream*"}
             />
-            <GenderSelectionModal
-              isVisible={modalVisible}
-              selectedGender={selectedGender}
-              handleGenderSelect={handleGenderSelect}
-              label={"Gender"}
+            <RNPickerSelect
+              onValueChange={(value) => console.log(value)}
+              items={[
+                { label: "Football", value: "football" },
+                { label: "Baseball", value: "baseball" },
+                { label: "Hockey", value: "hockey" },
+              ]}
             />
-
+            {/* <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => {
+                navigation?.navigate("SelectYear");
+              }}
+              style={{ flex: 1 }}
+             >
+              <AnimatedInput
+                placeholder="Degree*"
+                valid={isValid}
+                errorText="Error"
+                value={`${college?.passingYear},${college?.college},${college?.deg}`}
+                styleLabel={{
+                  fontWeight: "600",
+                  color:
+                    colorScheme === "light"
+                      ? appColors?.black
+                      : appColors?.white,
+                }}
+                styleInput={{
+                  color:
+                    colorScheme === "light"
+                      ? appColors?.black
+                      : appColors?.white,
+                }}
+              />
+            </TouchableOpacity> */}
             <CommonInputBox
               value={`${college?.passingYear},${college?.college},${college?.deg}`}
               label={"Degree"}
@@ -312,30 +475,112 @@ const PersonalProfile = ({ navigation }) => {
                 navigation?.navigate("SelectYear");
               }}
             />
-            <CommonInputBox
-              label={"Splecilaity"}
-              value={special?.toString()}
+
+            <TouchableOpacity
+              activeOpacity={1}
               onPress={() => {
                 navigation?.navigate("SelectSpecial");
               }}
-            />
-            <CommonInputBox
-              label={"Membership"}
-              value={memberShip?.toString()}
+              style={{ flex: 1 }}
+            >
+              <AnimatedInput
+                placeholder="Splecilaity*"
+                valid={isValid}
+                errorText="Error"
+                value={special?.toString()}
+                styleLabel={{
+                  fontWeight: "600",
+                  color:
+                    colorScheme === "light"
+                      ? appColors?.black
+                      : appColors?.white,
+                }}
+                styleInput={{
+                  color:
+                    colorScheme === "light"
+                      ? appColors?.black
+                      : appColors?.white,
+                }}
+                styleBodyContent={styles.bodyContent}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={1}
               onPress={() => {
                 navigation?.navigate("MembershipSelect");
               }}
+              style={{ flex: 1 }}
+            >
+              <AnimatedInput
+                placeholder="Membership*"
+                valid={isValid}
+                errorText="Error"
+                value={memberShip?.toString()}
+                styleLabel={{
+                  fontWeight: "600",
+                  color:
+                    colorScheme === "light"
+                      ? appColors?.black
+                      : appColors?.white,
+                }}
+                styleInput={{
+                  color:
+                    colorScheme === "light"
+                      ? appColors?.black
+                      : appColors?.white,
+                }}
+                styleBodyContent={styles.bodyContent}
+              />
+            </TouchableOpacity>
+            <AnimatedInput
+              placeholder="Professional*"
+              valid={isValid}
+              errorText="Error"
+              onChangeText={(text) => setProfessional(text)}
+              value={professional}
+              styleLabel={{
+                fontWeight: "600",
+                color:
+                  colorScheme === "light" ? appColors?.black : appColors?.white,
+              }}
+              styleInput={{
+                color:
+                  colorScheme === "light" ? appColors?.black : appColors?.white,
+              }}
+              styleBodyContent={styles.bodyContent}
             />
-            <CommonInputBox label={"Professialn"} />
-            <CommonInputBox
-              label={"exepreince"}
+            <AnimatedInput
+              placeholder="Exepreince*"
+              valid={isValid}
+              errorText="Error"
+              onChangeText={(text) => setExepreince(text)}
+              value={exepreince}
+              styleLabel={{
+                fontWeight: "600",
+                color:
+                  colorScheme === "light" ? appColors?.black : appColors?.white,
+              }}
+              styleInput={{
+                color:
+                  colorScheme === "light" ? appColors?.black : appColors?.white,
+              }}
+              styleBodyContent={styles.bodyContent}
+            />
+            {/* <CommonInputBox
+              label={"Exepreince*"}
               onChangeText={(e) => {
                 setProfileDate({ ...profileData, experience: e });
               }}
-            />
+            /> */}
           </ScrollView>
         </View>
-        <View style={{ paddingHorizontal: 20 }}>
+
+        <View
+          style={{
+            paddingHorizontal: 20,
+            paddingBottom: 50,
+          }}
+        >
           <RightButton
             onPress={() => {
               handleProfile();

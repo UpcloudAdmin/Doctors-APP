@@ -37,6 +37,10 @@ import ThemeChange from "../screens/internal/Setting/ThemeChange";
 import { useScrollToTop } from "@react-navigation/native";
 import { StyleSheet, Text, View, Animated, ScrollView } from "react-native";
 import AudioCallScreen from "../screens/AudioCallScreen";
+import DoctorCardshare from "../screens/internal/PersonalProfile/DoctorCardshare";
+import Account from "../screens/internal/Setting/Account";
+import ReviewPrompt from "../screens/internal/Setting/ReviewPrompt";
+
 
 const HomeScreen = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -127,6 +131,9 @@ const StackNavigator = () => {
       <Stack.Screen name="writeAddress" component={WriteAddress} />
       <Stack.Screen name="ThemeChange" component={ThemeChange} />
       <Stack.Screen name="AudioCallScreen" component={AudioCallScreen} />
+      <Stack.Screen name="DoctorCardshare" component={DoctorCardshare} />
+      <Stack.Screen name="Account" component={Account} />
+      <Stack.Screen name="ReviewPrompt" component={ReviewPrompt} />
     </Stack.Navigator>
   );
 };

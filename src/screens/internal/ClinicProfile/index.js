@@ -34,17 +34,27 @@ const ClinicProfile = ({ navigation }) => {
   ]);
   console.log(clinic, "<--wqweqwe");
   return (
-    <ScreenWrapper statusBarColor={appColors?.brown}>
+    <ScreenWrapper  statusBarColor={
+        colorScheme === "light"
+          ? appColors?.brown
+          : colorScheme === "dark"
+          ? appColors?.brown
+          : colorScheme === "justDark"
+          ? "#000000"
+          : appColors?.brown
+      }
+    >
       <View
         style={{
           flex: 1,
-          backgroundColor: colorScheme === "light" ? appColors?.white : "black",
+          backgroundColor:
+            colorScheme === "light" ? appColors?.white : appColors?.black,
         }}
       >
         <View style={{ flex: 0.23 }}>
           <CommonHeader
             navigation={navigation}
-            text={"Clinic \n Porfile"}
+            text={"Clinic \nPorfile"}
             showProgress={true}
           />
         </View>
@@ -64,7 +74,7 @@ const ClinicProfile = ({ navigation }) => {
               {
                 padding: 5,
                 backgroundColor:
-                  colorScheme === "light" ? appColors?.white : "black",
+                  colorScheme === "light" ? appColors?.white : appColors?.black,
                 borderWidth: 1,
                 borderColor:
                   colorScheme === "light" ? appColors?.white : "white",
@@ -163,7 +173,7 @@ const ClinicProfile = ({ navigation }) => {
             />
           </View>
         </View>
-        <View style={{ flex: 0.7, paddingHorizontal: 30 }}>
+        <View style={{ flex:1, paddingHorizontal: 30,marginTop:30 }}>
           <KeyboardAwareScrollView>
             <CommonInputBox
               onChangeText={(e) => {

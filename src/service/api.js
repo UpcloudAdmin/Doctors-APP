@@ -9,3 +9,5 @@ export const specialityList = () => "doctorlist/specialitylist";
 export const memberShipList = () => "doctorlist/membershiplist";
 
 export const getDoctorProfile = (query) => `user/doctor/${query}`;
+
+export const addBankAccount = () => "payment/createvendor";

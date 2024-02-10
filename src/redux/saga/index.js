@@ -5,7 +5,7 @@ import { watchVerifyRequest } from "./VerifyContact";
 import { watchDoctorProfileRequest } from "./DoctorProfile";
 import { watchDoctorProfileMeRequest } from "./doctorProfileMe";
 import { watchCollegeListRequest } from "./Collegelist";
-
+import { watchAddBankAccountRequest } from "./addBankAccount";
 function* rootSaga() {
   yield all([
     watchDoctorProfileRequest(),
@@ -14,6 +14,7 @@ function* rootSaga() {
     watchVerifyRequest(),
     watchDoctorProfileMeRequest(),
     watchCollegeListRequest(),
+    watchAddBankAccountRequest(),
   ]);
 }
 

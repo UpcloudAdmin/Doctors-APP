@@ -12,27 +12,6 @@ const h = Dimensions.get("screen").height;
 const WeekelyCalendar = () => {
   const navigation = useNavigation();
 
-  // const [selectedDate, setSelectedDate] = useState(new Date());
-  // const datesBlacklistFunc = date => {
-  //   // Define your custom logic here
-  //   // For example, disable weekends
-  //   const day = date.getDay();
-  //   return day === 0 || day === 6; // Sunday or Saturday
-  // };
-
-  // return (
-  //   <ScreenWrapper>
-  //     <View>
-  //       <Text>sadasd</Text>
-  //       <View style={{backgroundColor: 'red'}}>
-  //         <CalendarStrip
-  //           style={{height: 150, paddingTop: 20, paddingBottom: 10}}
-  //           datesBlacklist={datesBlacklistFunc}
-  //         />
-  //       </View>
-  //     </View>
-  //   </ScreenWrapper>
-  // );
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   // Custom function to blacklist certain dates

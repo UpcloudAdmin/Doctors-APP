@@ -45,4 +45,18 @@ export const imagePath = {
   Activitycomputer: require("../assests/images/Activitycomputer.png"),
   healthcare: require("../assests/images/healthcare.png"),
   ActivitySupported: require("../assests/images/ActivitySupported.png"),
+  apploader: require("../assests/images/apploader.gif"),
+  holidayicon: require("../assests/images/holidayicon.png"),
+
+  calendarIcon: require("../assests/images/calendarIcon.png"),
+  displayIcon: require("../assests/images/displayIcon.png"),
+  feedbackIcon: require("../assests/images/feedbackIcon.png"),
+  profileIcon: require("../assests/images/profileIcon.png"),
+
+  accountCall: require("../assests/images/AccountCall.png"),
+  accountEmail: require("../assests/images/AccountEmail.png"),
+  accountLogout: require("../assests/images/AccountLogout.png"),
+  accountPassword: require("../assests/images/AccountPassword.png"),
+  accountQR: require("../assests/images/AccountQR.png"),
+  downloadDoc: require("../assests/images/downloadDoc.png"),
 };

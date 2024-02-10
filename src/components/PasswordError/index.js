@@ -22,11 +22,11 @@ const PasswordError = ({ passwordFocus, passwordCheck, value }) => {
             backgroundColor: textChecker
               ? colorScheme === "light"
                 ? appColors?.lightGreen
-                : "black"
+                : appColors?.black
               : passwordFocus
               ? colorScheme === "light"
-                ? "white"
-                : "black"
+                ? appColors?.white
+                : appColors?.black
               : "#FF9393",
           },
         ]}
@@ -52,11 +52,11 @@ const PasswordError = ({ passwordFocus, passwordCheck, value }) => {
             backgroundColor: numberChecker
               ? colorScheme === "light"
                 ? appColors?.lightGreen
-                : "black"
+                : appColors?.black
               : passwordFocus
               ? colorScheme === "light"
-                ? "white"
-                : "black"
+                ? appColors?.white
+                : appColors?.black
               : "#FF9393",
           },
         ]}
@@ -86,11 +86,11 @@ const PasswordError = ({ passwordFocus, passwordCheck, value }) => {
             backgroundColor: specialChecker
               ? colorScheme === "light"
                 ? appColors?.lightGreen
-                : "black"
+                : appColors?.black
               : passwordFocus
               ? colorScheme === "light"
-                ? "white"
-                : "black"
+                ? appColors?.white
+                : appColors?.black
               : "#FF9393",
           },
         ]}
@@ -120,11 +120,11 @@ const PasswordError = ({ passwordFocus, passwordCheck, value }) => {
             backgroundColor: valueLength
               ? colorScheme === "light"
                 ? appColors?.lightGreen
-                : "black"
+                : appColors?.black
               : passwordFocus
               ? colorScheme === "light"
-                ? "white"
-                : "black"
+                ? appColors?.white
+                : appColors?.black
               : "#FF9393",
           },
         ]}

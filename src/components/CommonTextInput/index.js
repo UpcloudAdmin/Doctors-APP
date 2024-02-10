@@ -5,17 +5,17 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import React from 'react';
+} from "react-native";
+import React from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
   heightPercentageToDP,
-} from 'react-native-responsive-screen';
-import {imagePath} from '../../utils/imagePath';
-import {appColors} from '../../utils/appColors';
-import PasswordError from '../PasswordError';
-import {useAppCommonDataProvider} from '../../navigation/AppCommonDataProvider';
+} from "react-native-responsive-screen";
+import { imagePath } from "../../utils/imagePath";
+import { appColors } from "../../utils/appColors";
+import PasswordError from "../PasswordError";
+import { useAppCommonDataProvider } from "../../navigation/AppCommonDataProvider";
 const CommonTextInput = ({
   label,
   onChangeText,
@@ -29,36 +29,42 @@ const CommonTextInput = ({
   onBlur,
   style,
   maxlength,
-  keyboardType
+  keyboardType,
+  editable,
 }) => {
-  const {colorScheme} = useAppCommonDataProvider();
+  const { colorScheme } = useAppCommonDataProvider();
   console.log(!passwordFocus && value?.length !== 0, passwordFocus, value);
-  if (label?.includes('Password')) {
+  if (label?.includes("Password")) {
     return (
-      <View style={{height: 75}}>
+      <View style={{ height: 75 }}>
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderBottomColor: sucess ? appColors?.green : '#979797',
-            borderBottomWidth: 0.6,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            borderBottomColor: sucess
+              ? appColors?.green
+              : appColors?.loaderColor,
+            borderBottomWidth: 1,
             width: 265,
-            marginTop: '10%',
-          }}>
+            marginTop: "10%",
+          }}
+        >
           <TextInput
             secureTextEntry={eyeValue}
             placeholder={label}
             onFocus={onFocus}
+            placeholderTextColor={appColors?.loaderColor}
             onBlur={onBlur}
             onChangeText={onChangeText}
             value={value}
             style={{
-              width: '90%',
+              width: "90%",
               height: 40,
               fontSize: 17,
               paddingBottom: 10,
-              color: colorScheme === 'light' ? 'black' : 'white',
+              color:
+                colorScheme === "light" ? appColors?.black : appColors?.white,
             }}
           />
           <TouchableOpacity
@@ -68,7 +74,8 @@ const CommonTextInput = ({
                 // backgroundColor: 'red',
                 // height: '80%',
               }
-            }>
+            }
+          >
             <Image
               source={eyeValue ? imagePath?.eyeClose : imagePath?.eyeOpen}
               style={{
@@ -78,7 +85,7 @@ const CommonTextInput = ({
             />
           </TouchableOpacity>
         </View>
-        {console.log(value, '<---valuevalue')}
+        {console.log(value, "<---valuevalue")}
         {value?.length !== 0 && (
           <View>
             <PasswordError
@@ -96,19 +103,21 @@ const CommonTextInput = ({
       <View
         style={{
           height: 75,
-          flexDirection: 'row',
+          flexDirection: "row",
           width: 265,
           height: 40,
-          borderBottomColor: sucess ? appColors?.green : '#979797',
+          borderBottomColor: sucess ? appColors?.green : "#979797",
           borderBottomWidth: 0.6,
-        }}>
+        }}
+      >
         <Text
           style={{
-            color: colorScheme === 'light' ? 'black' : 'white',
+            color: colorScheme === "light" ? "black" : "white",
             marginRight: 10,
             fontSize: 17,
-            justifyContent: 'center',
-          }}>
+            justifyContent: "center",
+          }}
+        >
           {initvalue}
         </Text>
         <TextInput
@@ -123,7 +132,7 @@ const CommonTextInput = ({
               paddingBottom: 20,
               fontSize: 17,
 
-              color: colorScheme === 'light' ? 'black' : 'white',
+              color: colorScheme === "light" ? "black" : "white",
             },
             style,
           ]}
@@ -132,22 +141,25 @@ const CommonTextInput = ({
     );
   }
   return (
-    <View style={{height: 75}}>
+    <View style={{ height: 75 }}>
       <TextInput
         onChangeText={onChangeText}
         value={value}
-        keyboardType={keyboardType?keyboardType:"default"}
+        editable={editable}
+        
+        keyboardType={keyboardType ? keyboardType : "default"}
         placeholder={label}
         style={[
           {
-            width: 265,
             height: 40,
-            paddingBottom: 10,
-            fontSize: 17,
-            marginTop: '10%',
-            borderBottomColor: sucess ? appColors?.green : '#979797',
-            borderBottomWidth: 0.6,
-            color: colorScheme === 'light' ? 'black' : 'white',
+            paddingBottom: 9,
+            
+            fontSize: 16,
+            fontWeight:"500",
+            marginTop: "10%",
+            borderBottomColor: sucess ? appColors?.green : appColors?.darkblack,
+            borderBottomWidth: 1,
+            color: colorScheme === "light" ? "black" : "white",
           },
           style,
         ]}

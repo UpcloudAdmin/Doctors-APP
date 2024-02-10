@@ -6,7 +6,7 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  Animated,
+  Dimensions,
   Button,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -21,7 +21,7 @@ import { connect, useSelector, useDispatch } from "react-redux";
 import ActionSheet from "react-native-actions-sheet";
 import ImagePicker from "react-native-image-crop-picker";
 import { useIsFocused } from "@react-navigation/native";
-
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
 import { fonts } from "../../../utils/fonts";
 import { Dropdown } from "react-native-element-dropdown";
@@ -35,37 +35,39 @@ const DisplayProfile = ({ user_id }) => {
   const navigation = useNavigation();
   const actionSheetRef = React.createRef();
   const { colorScheme } = useAppCommonDataProvider();
-  const [uploadImages, setUploadImages] = useState([]);
+  const [uploadImages, setUploadImages] = useState([5]);
   var server_images = [];
   const [isFocus, setIsFocus] = useState(false);
-
+  const [imageUri, setImageUri] = useState(null);
+  const [imageClinic, setImageClinic] = useState(null);
   const [value, setValue] = useState("usa");
-
+  const screen = Dimensions.get("window");
+  const ASPECT_RATIO = screen.width / screen.height;
+  const LATITUDE_DELTA = 0.04;
+  const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+  const SCREEN_WIDTH = Dimensions.get("window").width;
   const data = [
     { label: "Ashvagandha Ayurvedic Multi - Speciality Clinic", value: "usa" },
     { label: "Ashvagandha Clinic", value: "2" },
   ];
 
   const [DoctorProfileData, setDoctorProfile] = useState([]);
+  const [maximumHeight, setMaximumHeight] = useState();
 
-  const hideTabBar = () => {
-    navigation.setOptions({
-      tabBarStyle: { display: "none" },
-    });
-  };
+  const hideTabBar = (event) => {};
 
   const showTabBar = () => {
-    navigation.setOptions({
-      tabBarStyle: {
-        display: "flex",
-        borderColor: "#DBDBDB",
-        height: 88,
-        paddingTop: 16,
-      },
-    });
+    // navigation.setOptions({
+    //   tabBarStyle: {
+    //     position: "absolute",
+    //     bottom: 0,
+    //     left: 0,
+    //     width: SCREEN_WIDTH,
+    //   },
+    // });
   };
 
-  useEffect(() => hideTabBar(), []);
+  useEffect(() => hideTabBar(), [focus]);
 
   useEffect(() => {
     ProfileData();
@@ -96,10 +98,10 @@ const DisplayProfile = ({ user_id }) => {
       },
     });
   };
-  const [imageUri, setImageUri] = useState(null);
 
   const handleOpenSheet = () => {
-    actionSheetRef.current?.setModalVisible();
+    // actionSheetRef.current?.setModalVisible();
+    actionSheetRef.current?.setModalVisible(true);
   };
 
   const handleOpenCamera = async () => {
@@ -128,19 +130,36 @@ const DisplayProfile = ({ user_id }) => {
       });
 
       // Set the selected image URI
+      console.log("image.path", image.path);
       setImageUri(image.path);
+      actionSheetRef.current?.setModalVisible(false);
     } catch (error) {
       console.log("Error opening library:", error);
     } finally {
       actionSheetRef.current?.setModalVisible(false);
     }
   };
+  const handleOpenLibraryClinic = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
 
+      // Set the selected image URI
+      console.log("image.path", image.path);
+      setImageClinic(image.path);
+    } catch (error) {
+      console.log("Error opening library:", error);
+    } finally {
+    }
+  };
   const openImagepicker = async () => {
     const option = {
       quality: 0.5,
       includeBase64: false,
-      selectionLimit: 10,
+      selectionLimit: 5,
       mediaType: "photo",
     };
 
@@ -171,43 +190,88 @@ const DisplayProfile = ({ user_id }) => {
       return prev.filter((items) => items?.fileName !== item?.fileName);
     });
   };
+
+  function onScroll(event) {
+    console.log("event", event.nativeEvent.contentOffset.y);
+    const position = event.nativeEvent.contentOffset.y;
+    if (position < 0) {
+      setMaximumHeight(0);
+    }
+    setMaximumHeight((prev) => Math.max(prev, position));
+
+    if (position < maximumHeight) {
+      navigation.setOptions({
+        tabBarStyle: {
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: SCREEN_WIDTH,
+        },
+      });
+    } else {
+      navigation.setOptions({
+        tabBarStyle: { display: "none" },
+      });
+    }
+  }
   return (
     <ScrollView
+      onScroll={onScroll}
       showsVerticalScrollIndicator={false}
       onMomentumScrollEnd={() => showTabBar()}
       onMomentumScrollBegin={() => hideTabBar()}
       contentContainerStyle={{
-        backgroundColor: colorScheme === "light" ? appColors?.white : "black",
+        backgroundColor:
+          colorScheme === "light" ? appColors?.white : appColors?.black,
         //height: 2400,
       }}
     >
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={handleOpenSheet}
-        style={{
-         // backgroundColor: "red",
-          width: "100%",
-          height: 375,
-          borderRadius: 25,
-        }}
-      >
-        <Image
-          source={imagePath?.docProfile}
+      <TouchableOpacity activeOpacity={1} onPress={handleOpenSheet}>
+        <View
           style={{
             width: "100%",
             height: 375,
             resizeMode: "cover",
-            borderRadius: 25,
+            borderBottomLeftRadius: 25,
+            borderBottomRightRadius: 25,
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+
+            elevation: 5,
           }}
-        />
+        >
+          <Image
+            style={{
+              width: "100%",
+              height: 375,
+              resizeMode: "cover",
+              borderBottomLeftRadius: 25,
+              borderBottomRightRadius: 25,
+            }}
+            //source={imagePath?.docProfile}
+            source={
+              imageUri
+                ? {
+                    uri: imageUri,
+                  }
+                : imagePath?.docProfile
+            }
+          />
+        </View>
       </TouchableOpacity>
       <View
-        style={{ marginTop: 30, marginHorizontal: 15, flexDirection: "row" }}
+        style={{ marginTop: 18, marginHorizontal: 15, flexDirection: "row" }}
       >
         <Text
           style={{
             fontSize: 17,
             fontWeight: "700",
+            marginTop: 7,
             color:
               colorScheme === "light" ? appColors?.black : appColors?.white,
           }}
@@ -223,16 +287,18 @@ const DisplayProfile = ({ user_id }) => {
             <Text
               style={{
                 fontSize: 17,
-                fontWeight: "600",
+                fontWeight: "400",
+                fontFamily: fonts.SF_Black,
                 color:
                   colorScheme === "light" ? appColors?.black : appColors?.white,
               }}
             >
-              Dr. {DoctorProfileData?.cardCollections?.doctorName}
+              Dr.
+              <Text>{DoctorProfileData?.cardCollections?.doctorName}</Text>
             </Text>
             <Text
               style={{
-                fontSize: 17,
+                fontSize: 15,
                 fontWeight: "600",
                 color:
                   colorScheme === "light" ? appColors?.black : appColors?.white,
@@ -251,8 +317,9 @@ const DisplayProfile = ({ user_id }) => {
                       : appColors?.white,
                 }}
               >
-                {DoctorProfileData?.cardCollections?.doctorCity} |
+                {DoctorProfileData?.cardCollections?.doctorCity}
               </Text>
+              <Text> | </Text>
               <Text
                 style={{
                   fontSize: 13,
@@ -269,15 +336,17 @@ const DisplayProfile = ({ user_id }) => {
           </View>
         </View>
       </View>
-      <View style={{ marginHorizontal: 30 }}>
-        <View style={{ flexDirection: "row", marginTop: 25 }}>
+      <View style={{ marginHorizontal: 26 }}>
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
           <Text
             style={{
               fontSize: 16,
               fontWeight: "700",
               justifyContent: "center",
               color:
-                colorScheme === "light" ? appColors?.black : appColors?.white,
+                colorScheme === "light"
+                  ? appColors?.black
+                  : appColors?.loaderColor,
             }}
           >
             Phone no :{" "}
@@ -301,7 +370,9 @@ const DisplayProfile = ({ user_id }) => {
               fontWeight: "700",
               justifyContent: "center",
               color:
-                colorScheme === "light" ? appColors?.black : appColors?.white,
+                colorScheme === "light"
+                  ? appColors?.black
+                  : appColors?.loaderColor,
             }}
           >
             Unique id
@@ -336,28 +407,42 @@ const DisplayProfile = ({ user_id }) => {
               style={{
                 flexDirection: "column",
                 justifyContent: "space-between",
+                marginTop: 25,
+                marginLeft: 27,
               }}
             >
               <Text style={styles.activityTextColor}>776</Text>
-              <Image source={imagePath?.Activitypaper}></Image>
+              <Image
+                style={{ marginTop: 18 }}
+                source={imagePath?.Activitypaper}
+              ></Image>
             </View>
             <View
               style={{
                 flexDirection: "column",
                 justifyContent: "space-between",
+                marginTop: 25,
               }}
             >
               <Text style={styles.activityTextColor}>23</Text>
-              <Image source={imagePath?.Activityattach}></Image>
+              <Image
+                style={{ marginTop: 18 }}
+                source={imagePath?.Activityattach}
+              ></Image>
             </View>
             <View
               style={{
                 flexDirection: "column",
                 justifyContent: "space-between",
+                marginTop: 25,
+                marginRight: 27,
               }}
             >
               <Text style={styles.activityTextColor}>Yes</Text>
-              <Image source={imagePath?.Activitycomputer}></Image>
+              <Image
+                style={{ marginTop: 18 }}
+                source={imagePath?.Activitycomputer}
+              ></Image>
             </View>
           </View>
         </View>
@@ -372,7 +457,7 @@ const DisplayProfile = ({ user_id }) => {
           >
             Education
           </Text>
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 20 }}>
             <Text
               style={{
                 textTransform: "capitalize",
@@ -388,11 +473,13 @@ const DisplayProfile = ({ user_id }) => {
             <Text
               style={{
                 textTransform: "capitalize",
-                fontSize: 15,
+                fontSize: 16,
                 fontWeight: "400",
                 marginTop: 10,
                 color:
-                  colorScheme === "light" ? appColors?.black : appColors?.white,
+                  colorScheme === "light"
+                    ? appColors?.black
+                    : appColors?.loaderColor,
               }}
             >
               {DoctorProfileData?.educations?.[0]?.college}
@@ -400,11 +487,13 @@ const DisplayProfile = ({ user_id }) => {
             <Text
               style={{
                 textTransform: "capitalize",
-                fontSize: 13,
+                fontSize: 15,
                 fontWeight: "700",
-                marginTop: 10,
+                marginTop: 7,
                 color:
-                  colorScheme === "light" ? appColors?.black : appColors?.white,
+                  colorScheme === "light"
+                    ? appColors?.black
+                    : appColors?.loaderColor,
               }}
             >
               {DoctorProfileData?.educations?.[0]?.passingYear}
@@ -453,71 +542,133 @@ const DisplayProfile = ({ user_id }) => {
         <View
           style={{
             marginTop: 30,
-            flexDirection: "row",
-            width: "90%",
+            flexDirection: "column",
+            width: "100%",
           }}
         >
           <View
             style={{
               marginTop: 17,
               flexDirection: "row",
-              width: "96%",
+              width: "85%",
             }}
           >
-            <View style={{ flexDirection: "column" }}>
-              <Image
-                source={imagePath?.ChangeClinicfirst}
-                style={{ width: 70, height: 70, borderRadius: 5 }}
-              />
-              <Text>Contacts : </Text>
-            </View>
+            <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={handleOpenLibraryClinic}
+              >
+                <View
+                  style={{
+                    width: 70,
+                    height: 70,
+                    borderRadius: 5,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
 
-            <View style={{ marginLeft: 15, justifyContent: "space-between" }}>
-              <Dropdown
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={data}
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus ? "Select item" : ""}
-                value={value}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={(item) => {
-                  setValue(item.value);
-                  setIsFocus(false);
-                }}
-              />
-
-              <Text
+                    elevation: 5,
+                  }}
+                >
+                  <Image
+                    source={
+                      imageClinic
+                        ? {
+                            uri: imageClinic,
+                          }
+                        : imagePath?.ChangeClinicfirst
+                    }
+                    style={{ width: 70, height: 70, borderRadius: 5 }}
+                  />
+                </View>
+              </TouchableOpacity>
+              <View
                 style={{
-                  fontSize: 17,
-                  fontWeight: "600",
-                  color:
-                    colorScheme === "light"
-                      ? appColors?.black
-                      : appColors?.white,
+                  flexDirection: "column",
+                  width: "90%",
+                  marginLeft: 20,
                 }}
               >
-                {DoctorProfileData?.cardCollections?.primarySpeciality}
-              </Text>
-              <View style={{ flex: 1, marginTop: 10 }}>
+                <Dropdown
+                  style={{
+                    width: "80%",
+                  }}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={{
+                    color:
+                      colorScheme === "light"
+                        ? appColors?.black
+                        : appColors?.white,
+                  }}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  iconColor={"red"}
+                  data={data}
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!isFocus ? "Select item" : ""}
+                  value={value}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={(item) => {
+                    setValue(item.value);
+                    setIsFocus(false);
+                  }}
+                />
+
                 <Text
                   style={{
-                    fontSize: 13,
-                    fontWeight: "400",
+                    fontSize: 17,
+                    fontWeight: "600",
                     color:
                       colorScheme === "light"
                         ? appColors?.black
                         : appColors?.white,
                   }}
                 >
-                  0217 - 2311333 , 0217 - 2310111 , 98786754321, 9876787652421
+                  {DoctorProfileData?.cardCollections?.primarySpeciality}
                 </Text>
               </View>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignSelf: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "700",
+                color:
+                  colorScheme === "light"
+                    ? appColors?.black
+                    : appColors?.loaderColor,
+              }}
+            >
+              Contacts :{" "}
+            </Text>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  marginTop: 20,
+                  fontSize: 13,
+                  fontWeight: "400",
+                  color:
+                    colorScheme === "light"
+                      ? appColors?.black
+                      : appColors?.white,
+                }}
+              >
+                0217 - 2311333 , 0217 - 2310111 , 98786754321, 9876787652421
+              </Text>
             </View>
           </View>
         </View>
@@ -526,7 +677,7 @@ const DisplayProfile = ({ user_id }) => {
             <Text
               style={{
                 fontSize: 30,
-                fontWeight: "600",
+                fontWeight: "700",
                 color:
                   colorScheme === "light" ? appColors?.black : appColors?.white,
               }}
@@ -534,60 +685,116 @@ const DisplayProfile = ({ user_id }) => {
               Clinic Photo
             </Text>
           </TouchableOpacity>
-          <FlatList
-            horizontal={true}
-            data={uploadImages}
-            renderItem={({ item }) => (
-              <View>
-                <Image
-                  style={{
-                    height: 60,
-                    width: 60,
-                    margin: 2,
-                    borderRadius: 6,
-                  }}
-                  source={{
-                    uri: item.uri,
-                  }}
-                ></Image>
-
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => DeleteImage(item)}
-                  style={{
-                    position: "absolute",
-                    right: 10,
-                    //backgroundColor: "red",
-                  }}
-                >
+          <View style={{ marginTop: 30 }}>
+            <FlatList
+              horizontal={true}
+              data={uploadImages}
+              renderItem={({ item }) => (
+                <View style={{ flex: 1 }}>
                   <Image
                     style={{
-                      height: 20,
-                      width: 20,
+                      height: 45,
+                      width: 45,
+                      margin: 12,
+                      borderRadius: 8,
                     }}
-                    source={imagePath?.no}
-                  ></Image>
-                  {/* <Icon name={"Delete"} size={20} /> */}
-                </TouchableOpacity>
-              </View>
-            )}
-          ></FlatList>
+                    source={
+                      item.uri
+                        ? {
+                            uri: item.uri,
+                          }
+                        : imagePath?.docProfile
+                    }
+                  />
+
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => DeleteImage(item)}
+                    style={{
+                      position: "absolute",
+                      right: 3,
+                    }}
+                  >
+                    <Image
+                      style={{
+                        height: 20,
+                        width: 20,
+                      }}
+                      source={imagePath?.no}
+                    ></Image>
+                  </TouchableOpacity>
+                </View>
+              )}
+            ></FlatList>
+          </View>
           <Text
             style={{
               fontSize: 16,
               fontWeight: "500",
+              marginTop: 20,
               paddingRight: "12%",
               color:
-                colorScheme === "light" ? appColors?.black : appColors?.white,
+                colorScheme === "light"
+                  ? appColors?.black
+                  : appColors?.loaderColor,
             }}
           >
             Annusaya Nivas, 13, Pali Hill, Bandra (West), Mumbai 400050
           </Text>
-          <Image source={imagePath?.map} style={{ resizeMode: "cover" }} />
+          {/* <Image
+            source={imagePath?.map}
+            style={{
+              resizeMode: "cover",
+              marginTop: 15,
+              paddingRight: 25,
+              paddingLeft: 25,
+            }}
+          /> */}
+          <View
+            style={{
+              marginTop: 15,
+              paddingRight: 25,
+              height: 200,
+              width: 350,
+            }}
+          >
+            {/* {!!item && ( */}
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={{
+                height: 200,
+                width: 350,
+              }}
+              initialRegion={{
+                latitude: 26.7922,
+                longitude: 82.1998,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA,
+              }}
+            >
+              <Marker
+                coordinate={{
+                  latitude: 26.7922,
+                  longitude: 82.1998,
+                }}
+                pinColor={"red"}
+              >
+                <Image
+                  source={imagePath?.ActivitySupported}
+                  style={{
+                    resizeMode: "cover",
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </Marker>
+            </MapView>
+            {/* )} */}
+          </View>
           <View
             style={{
               flexDirection: "row",
-              marginTop: "5%",
+              marginTop: 15,
             }}
           >
             <Text
@@ -596,7 +803,9 @@ const DisplayProfile = ({ user_id }) => {
                 fontWeight: "700",
                 textAlign: "center",
                 color:
-                  colorScheme === "light" ? appColors?.black : appColors?.white,
+                  colorScheme === "light"
+                    ? appColors?.black
+                    : appColors?.loaderColor,
               }}
             >
               Mon - Thur :{" "}
@@ -616,16 +825,19 @@ const DisplayProfile = ({ user_id }) => {
           <View
             style={{
               flexDirection: "row",
-              marginTop: "5%",
+              marginTop: 10,
             }}
           >
+            <Image source={imagePath?.holidayicon}></Image>
             <Text
               style={{
                 fontSize: 16,
                 fontWeight: "700",
                 textAlign: "center",
                 color:
-                  colorScheme === "light" ? appColors?.black : appColors?.white,
+                  colorScheme === "light"
+                    ? appColors?.black
+                    : appColors?.loaderColor,
               }}
             >
               Holiday :
@@ -644,17 +856,15 @@ const DisplayProfile = ({ user_id }) => {
           </View>
         </View>
         <View style={{ marginTop: 30 }}>
-          <ListItems name={"Services"} data={DoctorProfileData?.services} />
-        </View>
-        <View style={{ marginTop: 30 }}>
           <ListItems
-            name={"Clinical Specialisation"}
-            data={DoctorProfileData?.specialities}
+            name={"Clinic Services"}
+            data={DoctorProfileData?.services}
           />
         </View>
+
         <View style={{ marginTop: 30 }}>
           <ListItems
-            name={"Clinical Issues"}
+            name={"Clinic Issues"}
             data={DoctorProfileData?.clinics?.[0]}
           />
         </View>
@@ -668,7 +878,7 @@ const DisplayProfile = ({ user_id }) => {
           <Text
             style={{
               fontSize: 30,
-              fontWeight: "600",
+              fontWeight: "700",
               color:
                 colorScheme === "light" ? appColors?.black : appColors?.white,
             }}
@@ -681,13 +891,23 @@ const DisplayProfile = ({ user_id }) => {
                 fontSize: 15,
                 fontWeight: "400",
                 lineHeight: 18,
+                marginTop: 20,
                 color:
-                  colorScheme === "light" ? appColors?.black : appColors?.white,
+                  colorScheme === "light"
+                    ? appColors?.black
+                    : appColors?.loaderColor,
               }}
             >
               {DoctorProfileData?.about}
             </Text>
           </View>
+          <View
+            style={{
+              borderBottomColor: appColors?.listcolor,
+              borderBottomWidth: 0.7,
+              marginTop: 10,
+            }}
+          ></View>
           <View
             style={{
               marginTop: 30,
@@ -700,24 +920,25 @@ const DisplayProfile = ({ user_id }) => {
               source={imagePath?.ActivitySupported}
               style={{
                 resizeMode: "cover",
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 50,
               }}
             />
             <View style={{ flexDirection: "column", marginLeft: 20 }}>
               <Text
                 style={{
-                  fontSize: 12.21,
-                  fontWeight: 400,
-                  color: appColors.gray,
+                  fontSize: 13,
+                  fontWeight: "400",
+                  marginTop: 10,
+                  color: appColors.loaderColor,
                 }}
               >
                 Supported by
               </Text>
               <Text
                 style={{
-                  fontSize: 14.21,
-                  fontWeight: 600,
+                  fontSize: 15,
+                  fontWeight: "700",
                   color:
                     colorScheme === "light"
                       ? appColors?.black
@@ -735,13 +956,6 @@ const DisplayProfile = ({ user_id }) => {
             <Button title="Open Library" onPress={handleOpenLibrary} />
           </View>
         </ActionSheet>
-
-        {imageUri && (
-          <Image
-            source={{ uri: imageUri }}
-            style={{ width: 200, height: 200, marginTop: 20 }}
-          />
-        )}
       </View>
     </ScrollView>
 
@@ -764,7 +978,7 @@ const styles = StyleSheet.create({
   },
   activityTextColor: {
     fontSize: 26,
-    fontWeight: 500,
+    fontWeight: "500",
     color: appColors.pink,
     fontFamily: fonts.SF_Black,
   },
@@ -788,5 +1002,9 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     fontSize: 18,
+  },
+  iconStyle: {
+    width: 40,
+    height: 20,
   },
 });

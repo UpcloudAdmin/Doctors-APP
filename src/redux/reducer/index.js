@@ -8,6 +8,7 @@ import { verifyContactStateReducer } from "./VerifyContact";
 import { RequestOtpReducer } from "./RequestOtp";
 import { DoctorProfileMeReducer } from "./doctorProfileMe";
 import {CollegeListReducer} from "./Collegelist"
+import {AddBankAccountReducer} from "./addBankAccount"
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
@@ -21,6 +22,7 @@ const GlobalReducer = combineReducers({
   DoctorProfileReducer,
   DoctorProfileMeReducer,
   CollegeListReducer,
+  AddBankAccountReducer,
 });
 
 const rootReducer = (state, action) => {

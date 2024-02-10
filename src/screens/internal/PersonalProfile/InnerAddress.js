@@ -21,8 +21,15 @@ import { useAppCommonDataProvider } from "../../../navigation/AppCommonDataProvi
 
 const InnerAddress = ({ navigation }) => {
   const { colorScheme } = useAppCommonDataProvider();
-
+  const [city, setCity] = useState("");
+  const [stateName, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [countryName, setCountry] = useState("");
   const [value, setValue] = useState("");
+  const [locationLatLong, setLocationLatLong] = useState({
+    lat: null,
+    long: null,
+  });
   console.log(value, "<---wqweqewqe");
   const [loc, setLoc] = useState({
     latitude: 0,
@@ -67,40 +74,65 @@ const InnerAddress = ({ navigation }) => {
       )
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log(responseJson, "<---ppooee");
-          responseJson.address_components?.filter((val) => {
+          console.log(responseJson?.results, "<---ppooee");
+          responseJson?.results?.address_components.filter((val) => {
             if (val.types?.includes("postal_code")) {
               let postalCode = val.long_name;
               console.log(postalCode, "<----ppp");
-              // zipCode = postalCode;
+              zipCode = postalCode;
             }
-
             if (val.types?.includes("country")) {
               let countryN = val.long_name;
-              //countryName = countryN;
+              countryName = countryN;
             }
             if (val.types?.includes("administrative_area_level_1")) {
-              //stateName = val?.long_name;
+              stateName = val?.long_name;
             }
 
-            if (val.types?.includes("locality")) {
-              //localityArea = val?.long_name;
-            }
+            // if (val.types?.includes("locality")) {
+            //   city = val?.long_name;
+            // }
             return false;
           });
-          // if (responseJson.status === "OK") {
-          //   console.log(responseJson?.results?.[0], "hhhhh");
-          //   resolve(responseJson?.results?.[0]?.formatted_address);
-          // } else {
-          //   reject("not found");
-          // }
+          setZipCode(zipCode);
+          setState(stateName);
+          setCountry(countryName);
+          // setCity(city);
         })
         .catch((error) => {
           reject(error);
         });
     });
   }
+  const handlePlaceSelection = (data, details) => {
+    console.log("details", data?.description);
+    console.log("details", details);
+    details?.address_components?.filter((val) => {
+      if (val.types?.includes("postal_code")) {
+        let postalCode = val.long_name;
+        console.log(postalCode, "<----ppp");
+        zipCode = postalCode;
+      }
+      if (val.types?.includes("country")) {
+        let countryN = val.long_name;
+        countryName = countryN;
+      }
+      if (val.types?.includes("administrative_area_level_1")) {
+        stateName = val?.long_name;
+      }
 
+      // if (val.types?.includes("locality")) {
+      //   city = val?.long_name;
+      // }
+      return false;
+    });
+    const lat = details.geometry.location.lat;
+    const lng = details.geometry.location.lng;
+    setLocationLatLong({
+      lat: lat,
+      long: lng,
+    });
+  };
   return (
     <ScreenWrapper
       statusBarColor={colorScheme === "light" ? appColors?.white : "black"}
@@ -118,7 +150,8 @@ const InnerAddress = ({ navigation }) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: colorScheme === "light" ? appColors?.white : "black",
+          backgroundColor:
+            colorScheme === "light" ? appColors?.white : appColors?.black,
         }}
       >
         <View
@@ -132,17 +165,17 @@ const InnerAddress = ({ navigation }) => {
           }}
         >
           <GooglePlacesAutocomplete
-            GooglePlacesDetailsQuery={{ fields: "geometry" }}
             placeholder="Search"
             fetchDetails={true}
-            onPress={(data, details = null) => {
-              // 'details' is provided when fetchDetails = true
-              setLoc({
-                latitude: details?.geometry?.location?.lat,
-                longitude: details?.geometry?.location?.lng,
-              });
-              console.log(data, details?.geometry?.location, "<--saasdsadas");
-            }}
+            // onPress={(data, details = null) => {
+            //   // 'details' is provided when fetchDetails = true
+            //   setLoc({
+            //     latitude: details?.geometry?.location?.lat,
+            //     longitude: details?.geometry?.location?.lng,
+            //   });
+            //   console.log(data, details?.geometry?.location, "<--saasdsadas");
+            // }}
+            onPress={(data, details) => handlePlaceSelection(data, details)}
             query={{
               key: "AIzaSyBCE5TvjoFHpZA1Yz8bPOZCOce9grrzXrY",
               language: "en",
@@ -218,15 +251,15 @@ const InnerAddress = ({ navigation }) => {
           <View
             style={{
               position: "absolute",
-              height: 20,
-              width: 20,
+              height: 50,
+              width: "100%",
               backgroundColor: "red",
               bottom: 20,
               right: 20,
             }}
           ></View>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             width: "100%",
             // position: "absolute",
@@ -236,10 +269,10 @@ const InnerAddress = ({ navigation }) => {
           <CommonButton
             buttonText={"Enter you full address"}
             onPress={() => {
-              navigation?.navigate("WriteAddress");
+              navigation?.navigate("writeAddress");
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </ScreenWrapper>
   );

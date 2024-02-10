@@ -17,7 +17,7 @@ export function* handleDoctorProfile(action) {
       null,
       "get"
     );
-    yield console.log("Res >>>dev image ", JSON.stringify(response));
+    yield console.log("Res >>>dev image1 ", JSON.stringify(response?.data));
     if (response) {
       yield put(getDoctorProfileAction.success(response));
       if (typeof action?.payload?.extraData === "function") {

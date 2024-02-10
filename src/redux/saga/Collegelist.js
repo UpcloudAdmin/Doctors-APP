@@ -10,14 +10,16 @@ export function* handleCollegeList(action) {
     let tokenId = token ? token : action?.tokenId;
     yield put(getCollegeListAction.progress());
     let getCollegeListPath = doctorCollegeList(action?.payload?.id);
+    let data = action.payload;
+
     yield console.log("token >>> ", token);
     let response = yield authenticatedRequestImageUpload(
       tokenId,
       getCollegeListPath,
-      null,
+      data,
       "get"
     );
-    yield console.log("Res >>>dev image ", JSON.stringify(response));
+    yield console.log("getCollegeList ", JSON.stringify(response));
     if (response) {
       yield put(getCollegeListAction.success(response));
       if (typeof action?.payload?.extraData === "function") {

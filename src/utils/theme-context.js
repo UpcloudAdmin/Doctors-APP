@@ -1,46 +1,80 @@
-import React from "react";
+// import React from "react";
 
-const themes = {
-  dark: {
-    backgroundColor: "black",
-    color: "white",
-  },
-  light: {
-    backgroundColor: "white",
-    color: "black",
-  },
-};
+// const themes = {
+//   dark: {
+//     backgroundColor: "black",
+//     color: "white",
+//   },
+//   light: {
+//     backgroundColor: "white",
+//     color: "black",
+//   },
+// };
 
-const initialState = {
-  dark: false,
-  theme: themes.light,
-  toggle: () => {},
-};
-const ThemeContext = React.createContext(initialState);
+// const initialState = {
+//   dark: false,
+//   theme: themes.light,
+//   toggle: () => {},
+// };
+// const ThemeContext = React.createContext(initialState);
 
-function ThemeProvider({ children }) {
-  const [dark, setDark] = React.useState(false); // Default theme is light
+// function ThemeProvider({ children }) {
+//   const [dark, setDark] = React.useState(false); // Default theme is light
 
-  // On mount, read the preferred theme from the persistence
-  React.useEffect(() => {
-    const isDark = localStorage.getItem("dark") === "true";
-    setDark(isDark);
-  }, [dark]);
+//   // On mount, read the preferred theme from the persistence
+//   React.useEffect(() => {
+//     const isDark = localStorage.getItem("dark") === "true";
+//     setDark(isDark);
+//   }, [dark]);
 
-  // To toggle between dark and light modes
-  const toggle = () => {
-    const isDark = !dark;
-    localStorage.setItem("dark", JSON.stringify(isDark));
-    setDark(isDark);
+//   // To toggle between dark and light modes
+//   const toggle = () => {
+//     const isDark = !dark;
+//     localStorage.setItem("dark", JSON.stringify(isDark));
+//     setDark(isDark);
+//   };
+
+//   const theme = dark ? themes.dark : themes.light;
+
+//   return (
+//     <ThemeContext.Provider value={{ theme, dark, toggle }}>
+//       {children}
+//     </ThemeContext.Provider>
+//   );
+// }
+
+// export { ThemeProvider, ThemeContext };
+// ThemeContext.js
+import React, { createContext, useContext, useState } from 'react';
+
+const ThemeContext = createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('default'); // default, dark, light
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => {
+      if (prevTheme === 'default') {
+        return 'dark';
+      } else if (prevTheme === 'dark') {
+        return 'light';
+      } else {
+        return 'default';
+      }
+    });
   };
 
-  const theme = dark ? themes.dark : themes.light;
-
   return (
-    <ThemeContext.Provider value={{ theme, dark, toggle }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
-}
+};
 
-export { ThemeProvider, ThemeContext };
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Animated, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Animated, Image } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/internal/Home";
@@ -7,6 +7,7 @@ import Profile from "../screens/internal/Profile";
 import DisplayProfile from "../screens/internal/DisplayProfile";
 import CalenderScreen from "../screens/internal/CalenderScreen";
 import { useScrollToTop } from "@react-navigation/native";
+import { imagePath } from "../utils/imagePath";
 
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -15,12 +16,68 @@ const TabNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="CalenderScreen"
+      initialRouteName="Calender"
     >
-      <Tab.Screen name="Home" component={DisplayProfile} />
-      <Tab.Screen name="CalenderScreen" component={CalenderScreen} />
-      <Tab.Screen name="Settings" component={FeedBack} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen
+        name="FeedBack"
+        component={FeedBack}
+        options={{
+          tabBarLabel: "Feed",
+          tabBarIcon: ({ color, size, focused }) => (
+            <View>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={imagePath?.feedbackIcon}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Calender"
+        component={CalenderScreen}
+        options={{
+          tabBarLabel: "Calender",
+          tabBarIcon: ({ color, size, focused }) => (
+            <View>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={imagePath?.calendarIcon}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: "Edit Profile",
+          tabBarIcon: ({ color, size, focused }) => (
+            <View>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={imagePath?.profileIcon}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Display Profile"
+        component={DisplayProfile}
+        options={{
+          tabBarLabel: "Display Profile",
+          tabBarIcon: ({ color, size, focused }) => (
+            <View>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={imagePath?.displayIcon}
+              />
+            </View>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };
@@ -42,4 +99,3 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
-

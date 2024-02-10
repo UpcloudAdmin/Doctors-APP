@@ -158,7 +158,7 @@ const CalenderScreen = ({ navigation, success }) => {
               marked: true,
               dotColor: "red",
               fontSize: 19,
-              fontWeight: 300,
+              fontWeight: "300",
               fontWeight: "bold",
               textColor: "white", // Change text color to white for marked days
             };
@@ -294,7 +294,7 @@ const CalenderScreen = ({ navigation, success }) => {
         backgroundColor: index % 2 === 0 ? "##FF777F" : "#f0f0f0", // Alternating background color
       }}
     >
-      <Text style={{ fontWeight: 400, fontSize: 19 }}>{item.title}</Text>
+      <Text style={{ fontWeight: "400", fontSize: 19 }}>{item.title}</Text>
     </View>
   );
   return (
@@ -327,7 +327,7 @@ const CalenderScreen = ({ navigation, success }) => {
               >
                 <Image source={imagePath?.back} />
 
-                <Text style={{ color: "white", fontSize: 28, fontWeight: 600 }}>
+                <Text style={{ color: "white", fontSize: 28, fontWeight: "600" }}>
                   {currentDate}
                   {currentMonth}
                 </Text>
@@ -378,7 +378,7 @@ const CalenderScreen = ({ navigation, success }) => {
               color: "#FFF",
               paddingLeft: 10,
               fontSize: 25,
-              fontWeight: 300,
+              fontWeight: "300",
             }}
           >
             {displayText}
@@ -447,7 +447,7 @@ const CalenderScreen = ({ navigation, success }) => {
                 }}
               >
                 <Text
-                  style={{ color: "#F5A623", fontSize: 18, fontWeight: 400 }}
+                  style={{ color: "#F5A623", fontSize: 18, fontWeight: "400" }}
                 >
                   Declare Holiday
                 </Text>
@@ -599,14 +599,14 @@ const CalenderScreen = ({ navigation, success }) => {
                 // tintColor={success ? appColors?.white : appColors?.black}
                 source={imagePath?.ChangeClinicfirst}
               />
-              <Text style={{ fontWeight: 400, fontSize: 22 }}>
+              <Text style={{ fontWeight: "400", fontSize: 22 }}>
                 {"Change\n"}
-                <Text style={{ fontWeight: 700, fontSize: 30 }}>Clinic</Text>
+                <Text style={{ fontWeight: "700", fontSize: 30 }}>Clinic</Text>
               </Text>
             </View>
             <Button
               title="Done"
-              style={{ fontWeight: 400, fontSize: 21 }}
+              style={{ fontWeight: "400", fontSize: 21 }}
               onPress={() => this.RBSheet.close()}
             />
           </View>
@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   headerText: {
-    fontWeight: "bold",
+    //fontWeight: "bold",
     fontSize: 16,
     color: "black",
   },
@@ -678,7 +678,7 @@ const styles = StyleSheet.create({
   },
   customHeaderText: {
     fontSize: 16,
-    fontWeight: "bold",
+   // fontWeight: "bold",
     color: "black",
   },
   dayContainer: {
@@ -692,7 +692,7 @@ const styles = StyleSheet.create({
   },
   dayText: {
     fontSize: 19,
-    fontWeight: 600,
+    fontWeight: "600",
     fontWeight: "bold",
     color: "white", // Default text color
   },
@@ -706,7 +706,7 @@ const styles = StyleSheet.create({
   },
   disabledDayText: {
     fontSize: 19,
-    fontWeight: 600,
+    fontWeight: "600",
     fontWeight: "bold",
     color: "white",
   },

@@ -17,40 +17,40 @@ const Verification = ({ navigation, route }) => {
   const [Otp, setOtp] = useState("");
   const verify = async () => {
     try {
-      dispatch({
-        type: verifyContactAction?.types?.start,
-        payload: {
-          contact: route?.params?.contact,
-          otp: parseInt(Otp),
-          extraData: (verifyContactResponse) => {
-            console.log("verifyContactResponse", verifyContactResponse);
-            if (verifyContactResponse?.status === 200) {
-              if (verifyContactResponse?.data?.status == "success") {
-                 CustomMessage(verifyContactResponse?.data?.message, "success");
-              navigation?.navigate("TabNavigator");
-              }
-            } else {
-              CustomMessage(err?.response?.data?.message?.message, "danger");
-            }
-          },
-          onError: (err) => {
-            //console.log("err", err);
-            CustomMessage(err?.response?.data?.message?.message, "danger");
-          },
-        },
-      });
-      // const res = await apiPostModule("v11/user/verifycontact", {
-      //   contact: "8054303442",
-      //   otp: parseInt(Otp),
+      // dispatch({
+      //   type: verifyContactAction?.types?.start,
+      //   payload: {
+      //     contact: route?.params?.contact,
+      //     otp: parseInt(Otp),
+      //     extraData: (verifyContactResponse) => {
+      //       console.log("verifyContactResponse", verifyContactResponse);
+      //       if (verifyContactResponse?.status === 200) {
+      //         if (verifyContactResponse?.data?.status == "success") {
+      //            CustomMessage(verifyContactResponse?.data?.message, "success");
+      //         navigation?.navigate("TabNavigator");
+      //         }
+      //       } else {
+      //         CustomMessage(err?.response?.data?.message?.message, "danger");
+      //       }
+      //     },
+      //     onError: (err) => {
+      //       //console.log("err", err);
+      //       CustomMessage(err?.response?.data?.message?.message, "danger");
+      //     },
+      //   },
       // });
-      // if (res?.status === "success") {
-      //   navigation?.navigate("Login");
-      // }
-      // if (res?.message?.status === "fail") {
-      //   Alert.alert(res?.message?.message);
-      // }
-      // // navigation?.navigate('EnterPhone');
-      // console.log(res, "<--sdasdas");
+      const res = await apiPostModule("v11/user/verifycontact", {
+        contact: "8054303442",
+        otp: parseInt(Otp),
+      });
+      if (res?.status === "success") {
+        navigation?.navigate("Login");
+      }
+      if (res?.message?.status === "fail") {
+        CustomMessage(res?.message?.message, "danger");
+      }
+      // navigation?.navigate('EnterPhone');
+      console.log(res, "<--sdasdas");
     } catch (err) {
       console.log(err, "<--asdasda");
     }
@@ -72,7 +72,8 @@ const Verification = ({ navigation, route }) => {
           flex: 1,
           paddingHorizontal: "7%",
           paddingTop: "15%",
-          backgroundColor: colorScheme === "light" ? appColors?.white : "black",
+          backgroundColor:
+            colorScheme === "light" ? appColors?.white : appColors?.black,
         }}
       >
         <View style={{ flex: 0.25 }}>
